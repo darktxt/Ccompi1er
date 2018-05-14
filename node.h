@@ -36,14 +36,15 @@ public:
 				delete t;
 			}
 	}
-	void debugInfo(bool next=true) {
+	void debugInfo(bool next=true,bool expand=true) {
 		node* t = this;
 		while (t) {
 			cout << type << endl;
 			for (int i = 0; i < t->contents.size(); i++)
 				cout << t->contents[i]->lineNum << "  " << t->contents[i]->name << "  " << t->contents[i]->content << endl;
-			for (int i = 0; i < t->sub.size(); i++)
-				t->sub[i]->debugInfo();
+			if(expand)
+				for (int i = 0; i < t->sub.size(); i++)
+					t->sub[i]->debugInfo();
 			if(next)
 				t = t->next;
 			else
