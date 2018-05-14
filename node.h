@@ -4,6 +4,7 @@
 #include<vector>
 #include"element.h"
 #include<stdarg.h>
+#include<iostream>
 using namespace std;
 class node{
 public:
@@ -34,6 +35,20 @@ public:
 				this->contents.insert(this->contents.end(),t->contents.begin(),t->contents.end());
 				delete t;
 			}
+	}
+	void debugInfo(bool next=true) {
+		node* t = this;
+		while (t) {
+			cout << type << endl;
+			for (int i = 0; i < t->contents.size(); i++)
+				cout << t->contents[i]->lineNum << "  " << t->contents[i]->name << "  " << t->contents[i]->content << endl;
+			for (int i = 0; i < t->sub.size(); i++)
+				t->sub[i]->debugInfo();
+			if(next)
+				t = t->next;
+			else
+				break;
+		}
 	}
 };
 #endif

@@ -8,7 +8,7 @@ int main()
 {
 	yyin = fopen("test.c","r");
 	yyparse();
-	node* t=root;
+	/*node* t=root;
 	//first output contents, then sub(first contents, then sub, then next), then next.
 	while(t!=NULL){
 		cout<<t->type<<endl;
@@ -24,6 +24,11 @@ int main()
 					}
 			}
 		t=t->next;
-	}
+	}*/
+	root->debugInfo(true);
+	cout<<endl<<endl;
+	root->next->next->debugInfo(false);
+	cout<<endl<<endl;
+	root->next->next->next->debugInfo(false);
 	return 0;
 }
