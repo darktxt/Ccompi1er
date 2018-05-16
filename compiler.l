@@ -22,42 +22,42 @@ void yyerror(char const *s);
 "//"[^\n]*              { /* consume //-comment */ }
 
 
-"auto"			{ count(); yylval.Element = new element(yylineno,"auto","");return(AUTO); }
-"_Bool"			{ count(); return(BOOL); }
+"auto"			{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","auto");return(AUTO); }
+"_Bool"			{ count(); yylval.Element = new element(yylineno,"type_specifier","_Bool");return(BOOL); }
 "break"			{ count(); return(BREAK); }
 "case"			{ count(); return(CASE); }
-"char"			{ count(); new element(yylineno,"type_specifier","char"); return(CHAR); }
-"_Complex"		{ count(); return(COMPLEX); }
-"const"			{ count(); return(CONST); }
+"char"			{ count(); yylval.Element = new element(yylineno,"type_specifier","char"); return(CHAR); }
+"_Complex"		{ count(); /*I abandon this. @txt*/return(COMPLEX); }
+"const"			{ count(); yylval.Element = new element(yylineno,"type_qualifier","const");return(CONST); }
 "continue"		{ count(); return(CONTINUE); }
 "default"		{ count(); return(DEFAULT); }
 "do"			{ count(); return(DO); }
 "double"		{ count(); yylval.Element = new element(yylineno,"type_specifier","double"); return(DOUBLE); }
 "else"			{ count(); return(ELSE); }
 "enum"			{ count(); return(ENUM); }
-"extern"		{ count(); return(EXTERN); }
+"extern"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","extern");return(EXTERN); }
 "float"			{ count(); yylval.Element = new element(yylineno,"type_specifier","float"); return(FLOAT); }
 "for"			{ count(); return(FOR); }
 "goto"			{ count(); return(GOTO); }
 "if"			{ count(); return(IF); }
-"_Imaginary"		{ count(); return(IMAGINARY); }
+"_Imaginary"		{ count(); /*I abandon this. @txt*/return(IMAGINARY); }
 "inline"		{ count(); return(INLINE); }
 "int"			{ count(); yylval.Element = new element(yylineno,"type_specifier","int"); return(INT); }
 "long"			{ count(); yylval.Element = new element(yylineno,"type_specifier","long"); return(LONG); }
-"register"		{ count(); return(REGISTER); }
-"restrict"		{ count(); return(RESTRICT); }
+"register"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","register");return(REGISTER); }
+"restrict"		{ count(); yylval.Element = new element(yylineno,"type_qualifier","restrict");return(RESTRICT); }
 "return"		{ count(); return(RETURN); }
-"short"			{ count(); new element(yylineno,"type_specifier","short"); return(SHORT); }
-"signed"		{ count(); return(SIGNED); }
+"short"			{ count(); yylval.Element = new element(yylineno,"type_specifier","short"); return(SHORT); }
+"signed"		{ count(); yylval.Element = new element(yylineno,"type_specifier","signed");return(SIGNED); }
 "sizeof"		{ count(); return(SIZEOF); }
-"static"		{ count(); return(STATIC); }
+"static"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","static");return(STATIC); }
 "struct"		{ count(); return(STRUCT); }
 "switch"		{ count(); return(SWITCH); }
-"typedef"		{ count(); return(TYPEDEF); }
+"typedef"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","typedef");return(TYPEDEF); }
 "union"			{ count(); return(UNION); }
-"unsigned"		{ count(); return(UNSIGNED); }
+"unsigned"		{ count(); yylval.Element = new element(yylineno,"type_specifier","unsigned");return(UNSIGNED); }
 "void"			{ count(); yylval.Element = new element(yylineno,"type_specifier","void"); return(VOID); }
-"volatile"		{ count(); return(VOLATILE); }
+"volatile"		{ count(); yylval.Element = new element(yylineno,"type_qualifier","volatile");return(VOLATILE); }
 "while"			{ count(); return(WHILE); }
 
 {L}({L}|{D})*		{ count();yylval.Element = new element(yylineno,"IDENTIFIER",yytext); return(check_type()); }

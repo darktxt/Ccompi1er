@@ -30,7 +30,7 @@ node* root = NULL;
 %type <Node> multiplicative_expression additive_expression shift_expression relational_expression equality_expression
 %type <Node> and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression
 %type <Node> assignment_expression assignment_operator expression
-%type <Node> declaration init_declarator_list init_declarator type_specifier declaration_specifiers
+%type <Node> declaration init_declarator_list init_declarator type_specifier declaration_specifiers storage_class_specifier type_qualifier function_specifier
 %type <Node> declarator direct_declarator 
 %type <Node> parameter_list parameter_declaration identifier_list
 %type <Node> abstract_declarator initializer initializer_list designation designator_list
@@ -181,55 +181,55 @@ constant_expression
 	;
 
 declaration
-	: declaration_specifiers ';'									
+	: declaration_specifiers ';'							//I don't think we will use this, which supports "int;".
 	| declaration_specifiers init_declarator_list ';'				{$$=new node("declaration",NULL,0);$$->addContents(2,$1,$2);}
 	;
 
 declaration_specifiers
-	: storage_class_specifier
-	| storage_class_specifier declaration_specifiers
-	| type_specifier												{$$=$1;}
-	| type_specifier declaration_specifiers
-	| type_qualifier
-	| type_qualifier declaration_specifiers
-	| function_specifier
-	| function_specifier declaration_specifiers
+	: storage_class_specifier							{$$=$1;}
+	| storage_class_specifier declaration_specifiers				{$$=new node("declaration_specifiers",NULL,0);$$->addContents(2,$1,$2);}//Risk of "auto auto int"
+	| type_specifier								{$$=$1;}
+	| type_specifier declaration_specifiers						{$$=new node("declaration_specifiers",NULL,0);$$->addContents(2,$1,$2);}//It's a sweet drug."int int" "int const"
+	| type_qualifier								{$$=$1;}
+	| type_qualifier declaration_specifiers						{$$=new node("declaration_specifiers",NULL,0);$$->addContents(2,$1,$2);}//Also a sweet drug.
+	| function_specifier								{$$=$1;}//inline
+	| function_specifier declaration_specifiers					{$$=new node("declaration_specifiers",NULL,0);}//Risk of "inline inline int"
 	;
 
 init_declarator_list
-	: init_declarator												{$$=$1;}
-	| init_declarator_list ',' init_declarator						
+	: init_declarator								{$$=$1;}
+	| init_declarator_list ',' init_declarator					{$$=new node("init_declarator_list",NULL,0);$$->addContents(2,$1,$3);}						
 	;
 
 init_declarator
-	: declarator													{$$=$1;}
-	| declarator '=' initializer
+	: declarator									{$$=$1;}
+	| declarator '=' initializer							//wait to be updated...
 	;
 
 storage_class_specifier
-	: TYPEDEF
-	| EXTERN
-	| STATIC
-	| AUTO
-	| REGISTER
+	: TYPEDEF									{$$=new node("storage_class_specifier",NULL,1,$1);}//Maybe we will not deal with this.
+	| EXTERN									{$$=new node("storage_class_specifier",NULL,1,$1);}
+	| STATIC									{$$=new node("storage_class_specifier",NULL,1,$1);}
+	| AUTO										{$$=new node("storage_class_specifier",NULL,1,$1);}
+	| REGISTER									{$$=new node("storage_class_specifier",NULL,1,$1);}
 	;
 
 type_specifier
-	: VOID															{$$=new node("type_specifier",NULL,1,$1);}
-	| CHAR															{$$=new node("type_specifier",NULL,1,$1);}
-	| SHORT															{$$=new node("type_specifier",NULL,1,$1);}
-	| INT															{$$=new node("type_specifier",NULL,1,$1);}
-	| LONG															{$$=new node("type_specifier",NULL,1,$1);}
-	| FLOAT															{$$=new node("type_specifier",NULL,1,$1);}
-	| DOUBLE														{$$=new node("type_specifier",NULL,1,$1);}
-	| SIGNED
-	| UNSIGNED
-	| BOOL
-	| COMPLEX
-	| IMAGINARY
-	| struct_or_union_specifier
-	| enum_specifier
-	| TYPE_NAME
+	: VOID										{$$=new node("type_specifier",NULL,1,$1);}
+	| CHAR										{$$=new node("type_specifier",NULL,1,$1);}
+	| SHORT										{$$=new node("type_specifier",NULL,1,$1);}
+	| INT										{$$=new node("type_specifier",NULL,1,$1);}
+	| LONG										{$$=new node("type_specifier",NULL,1,$1);}
+	| FLOAT										{$$=new node("type_specifier",NULL,1,$1);}
+	| DOUBLE									{$$=new node("type_specifier",NULL,1,$1);}
+	| SIGNED									{$$=new node("type_specifier",NULL,1,$1);}
+	| UNSIGNED									{$$=new node("type_specifier",NULL,1,$1);}
+	| BOOL										{$$=new node("type_specifier",NULL,1,$1);}
+	| COMPLEX									//Does C supports this? 
+	| IMAGINARY									//Ignore
+	| struct_or_union_specifier							//Ignore. Should we deal with it?
+	| enum_specifier								//Ignore. Should we deal with it?
+	| TYPE_NAME									//lex will not generate TYPE_NAME				
 	;
 
 struct_or_union_specifier
@@ -289,35 +289,35 @@ enumerator
 	;
 
 type_qualifier
-	: CONST
-	| RESTRICT
-	| VOLATILE
+	: CONST												{$$=new node("type_qualifier",NULL,1,$1);}
+	| RESTRICT											{$$=new node("type_qualifier",NULL,1,$1);}
+	| VOLATILE											{$$=new node("type_qualifier",NULL,1,$1);}
 	;
 
 function_specifier
-	: INLINE
+	: INLINE											{$$=new node("function_specifier",NULL,1,$1);}
 	;
 
 declarator
-	: pointer direct_declarator
-	| direct_declarator														{$$=$1;}
+	: pointer direct_declarator									//wait to be updated...
+	| direct_declarator										{$$=$1;}
 	;
 
 
 direct_declarator
-	: IDENTIFIER															{$$=new node("direct_declarator",NULL,1,$1);}
+	: IDENTIFIER											{$$=new node("direct_declarator",NULL,1,$1);}
 	| '(' declarator ')'
-	| direct_declarator '[' type_qualifier_list assignment_expression ']'
-	| direct_declarator '[' type_qualifier_list ']'
-	| direct_declarator '[' assignment_expression ']'
-	| direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'
-	| direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'
-	| direct_declarator '[' type_qualifier_list '*' ']'
-	| direct_declarator '[' '*' ']'
-	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')'
-	| direct_declarator '(' identifier_list ')'
-	| direct_declarator '(' ')'												{$$=$1;}	
+	| direct_declarator '[' type_qualifier_list assignment_expression ']'				//wait to be updated...
+	| direct_declarator '[' type_qualifier_list ']'							//wait to be updated...
+	| direct_declarator '[' assignment_expression ']'						//wait to be updated...
+	| direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'			//wait to be updated...
+	| direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'			//wait to be updated...
+	| direct_declarator '[' type_qualifier_list '*' ']'						//wait to be updated...
+	| direct_declarator '[' '*' ']'									//wait to be updated...
+	| direct_declarator '[' ']'									//wait to be updated...
+	| direct_declarator '(' parameter_type_list ')'							//wait to be updated...
+	| direct_declarator '(' identifier_list ')'							//wait to be updated...
+	| direct_declarator '(' ')'									{$$=$1;}	
 	;
 
 pointer
@@ -422,8 +422,8 @@ labeled_statement
 	;
 
 compound_statement
-	: '{' '}'
-	| '{' block_item_list '}'													{$$=$2;}
+	: '{' '}'														//This case means nothing.
+	| '{' block_item_list '}'												{$$=$2;}
 	;
 
 block_item_list
@@ -432,8 +432,8 @@ block_item_list
 	;
 
 block_item
-	: declaration																{$$=$1;}
-	| statement
+	: declaration														{$$=$1;}
+	| statement														{$$=$1;}
 	;
 
 expression_statement
@@ -465,7 +465,7 @@ jump_statement
 	;
 start
 	:
-translation_unit																{root=$1;}
+	translation_unit														{root=$1;}
 	;
 translation_unit
 	: external_declaration														{$$=$1;}
@@ -474,15 +474,15 @@ translation_unit
 
 external_declaration
 	: function_definition														{$$=$1;}
-	| declaration
+	| declaration															{$$=$1;}
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement
+	: declaration_specifiers declarator declaration_list compound_statement				//We will not deal with this case!
 	| declaration_specifiers declarator compound_statement						{$$=new node("function_definition",NULL,0);$$->addContents(2,$1,$2);$$->addSub(1,$3);}
 	;
 
-declaration_list
+declaration_list											//This case is abandoned.
 	: declaration
 	| declaration_list declaration
 	;

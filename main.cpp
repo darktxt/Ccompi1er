@@ -11,7 +11,5 @@ int main()
 	root->debugInfo(true,false); //show info all the instructions following,no extand
 	cout<<endl<<endl;
 	root->next->next->debugInfo(false,true);//only show this instruction,extand
-	cout<<endl<<endl;
-	root->next->next->next->debugInfo(false,true);
 	return 0;
 }
