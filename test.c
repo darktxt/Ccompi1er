@@ -4,13 +4,14 @@ float test()
 	double s;
 }
 
+
+double c3;
 double i2;
-int r4;
 
 void main()
 {
 	int b;
 	float tes;
 	
-	long ww;
+	unsigned const long ww,c,d;
 }
