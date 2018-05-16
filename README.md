@@ -1,4 +1,13 @@
 # Ccompiler
+
+### 已实现 
+```
+inline void main(double x)
+{
+    static int y;
+    y=x;
+}
+```
 ---
 
 编译命令
