@@ -2080,7 +2080,102 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 79:
+        case 2:
+#line 45 "compiler.y"
+    {(yyval.Node)=new node("primary_expression",NULL,1,(yyvsp[(1) - (1)].Element));;}
+    break;
+
+  case 3:
+#line 46 "compiler.y"
+    {(yyval.Node)=new node("primary_expression",NULL,1,(yyvsp[(1) - (1)].Element));;}
+    break;
+
+  case 5:
+#line 48 "compiler.y"
+    {(yyval.Node)=(yyvsp[(2) - (3)].Node);;}
+    break;
+
+  case 6:
+#line 52 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 18:
+#line 70 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 30:
+#line 88 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 32:
+#line 93 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 36:
+#line 100 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 39:
+#line 106 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 42:
+#line 112 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 47:
+#line 120 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 50:
+#line 126 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 52:
+#line 131 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 54:
+#line 136 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 56:
+#line 141 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 58:
+#line 146 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 60:
+#line 151 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);(yyvsp[(1) - (1)].Node)->debugInfo(false,true);;}
+    break;
+
+  case 63:
+#line 157 "compiler.y"
+    {(yyval.Node)=new node("assignment_expression",NULL,0);(yyval.Node)->addContents(2,(yyvsp[(1) - (3)].Node),(yyvsp[(3) - (3)].Node));;}
+    break;
+
+  case 75:
+#line 175 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 79:
 #line 185 "compiler.y"
     {(yyval.Node)=new node("declaration",NULL,0);(yyval.Node)->addContents(2,(yyvsp[(1) - (3)].Node),(yyvsp[(2) - (3)].Node));;}
     break;
@@ -2245,9 +2340,39 @@ yyreduce:
     {(yyval.Node)=new node("direct_declarator",NULL,1,(yyvsp[(1) - (1)].Element));;}
     break;
 
+  case 154:
+#line 318 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (4)].Node);(yyval.Node)->addSub(1,(yyvsp[(3) - (4)].Node));;}
+    break;
+
   case 156:
 #line 320 "compiler.y"
     {(yyval.Node)=(yyvsp[(1) - (3)].Node);;}
+    break;
+
+  case 163:
+#line 337 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 165:
+#line 342 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 166:
+#line 343 "compiler.y"
+    {node* t=(yyvsp[(1) - (3)].Node);while(t->next)t=t->next;t->next=(yyvsp[(3) - (3)].Node);;}
+    break;
+
+  case 167:
+#line 347 "compiler.y"
+    {(yyval.Node)=new node("parameter_declaration",NULL,0);(yyval.Node)->addContents(2,(yyvsp[(1) - (2)].Node),(yyvsp[(2) - (2)].Node));;}
+    break;
+
+  case 202:
+#line 412 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
     break;
 
   case 210:
@@ -2273,6 +2398,11 @@ yyreduce:
   case 214:
 #line 436 "compiler.y"
     {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    break;
+
+  case 216:
+#line 441 "compiler.y"
+    {(yyval.Node)=(yyvsp[(1) - (2)].Node);;}
     break;
 
   case 231:
@@ -2307,7 +2437,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2311 "compiler.cpp"
+#line 2441 "compiler.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
