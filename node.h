@@ -12,9 +12,11 @@ public:
 	node* next;
 	vector<element*> contents;
 	vector<node*> sub;
+	node* parent;
 	node(string type,node* next,int eleNum,...){
 		this->type = type;
 		this->next = next;
+		this->parent = NULL;
 		va_list ap;
 		va_start(ap, eleNum);
 		for(int i=0;i<eleNum;i++)
@@ -23,8 +25,11 @@ public:
 	void addSub(int subNum,...){
 		va_list ap;
 		va_start(ap, subNum);
-		for(int i=0;i<subNum;i++)
-			sub.push_back(va_arg(ap, node*));
+		for(int i=0;i<subNum;i++){
+				node* t = va_arg(ap, node*);
+				t->parent = this;				
+				sub.push_back(t);
+			}
 	}
 	void addContents(int nodeNum,...){
 		va_list ap;
@@ -33,6 +38,10 @@ public:
 			{
 				node* t = va_arg(ap, node*);
 				this->contents.insert(this->contents.end(),t->contents.begin(),t->contents.end());
+				for (int i = 0; i < t->sub.size(); i++){
+						t->sub[i]->parent = this;
+						sub.push_back(t->sub[i]);
+					}
 				delete t;
 			}
 	}

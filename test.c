@@ -6,12 +6,13 @@ float test()
 
 
 double c3;
-double i2;
 
-void main()
+void main(int x,int y)
 {
 	int b;
 	float tes;
 	
-	unsigned const long ww,c,d;
+	unsigned const long ww,c,
+	
+	d;
 }

@@ -32,7 +32,7 @@ node* root = NULL;
 %type <Node> assignment_expression assignment_operator expression
 %type <Node> declaration init_declarator_list init_declarator type_specifier declaration_specifiers storage_class_specifier type_qualifier function_specifier
 %type <Node> declarator direct_declarator 
-%type <Node> parameter_list parameter_declaration identifier_list
+%type <Node> parameter_list parameter_declaration identifier_list parameter_type_list
 %type <Node> abstract_declarator initializer initializer_list designation designator_list
 %type <Node> designator statement labeled_statement compound_statement block_item_list block_item expression_statement
 %type <Node> selection_statement iteration_statement jump_statement translation_unit external_declaration function_definition
@@ -315,7 +315,7 @@ direct_declarator
 	| direct_declarator '[' type_qualifier_list '*' ']'						//wait to be updated...
 	| direct_declarator '[' '*' ']'									//wait to be updated...
 	| direct_declarator '[' ']'									//wait to be updated...
-	| direct_declarator '(' parameter_type_list ')'							//wait to be updated...
+	| direct_declarator '(' parameter_type_list ')'							{$$=$1;$$->addSub(1,$3);}
 	| direct_declarator '(' identifier_list ')'							//wait to be updated...
 	| direct_declarator '(' ')'									{$$=$1;}	
 	;
@@ -334,19 +334,19 @@ type_qualifier_list
 
 
 parameter_type_list
-	: parameter_list
-	| parameter_list ',' ELLIPSIS
+	: parameter_list										{$$=$1;}
+	| parameter_list ',' ELLIPSIS									//This means "void main(int xx,...)". Shall we give up?
 	;
 
 parameter_list
-	: parameter_declaration
-	| parameter_list ',' parameter_declaration
+	: parameter_declaration										{$$=$1;}
+	| parameter_list ',' parameter_declaration							{node* t=$1;while(t->next)t=t->next;t->next=$3;}
 	;
 
 parameter_declaration
-	: declaration_specifiers declarator
-	| declaration_specifiers abstract_declarator
-	| declaration_specifiers
+	: declaration_specifiers declarator								{$$=new node("parameter_declaration",NULL,0);$$->addContents(2,$1,$2);}
+	| declaration_specifiers abstract_declarator							//wait to be updated...
+	| declaration_specifiers									//It's be abandoned.
 	;
 
 identifier_list
