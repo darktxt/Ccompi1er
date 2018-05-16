@@ -1212,7 +1212,7 @@ YY_RULE_SETUP
 case 43:
 YY_RULE_SETUP
 #line 67 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP

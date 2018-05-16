@@ -64,7 +64,7 @@ void yyerror(char const *s);
 
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
 0[0-7]*{IS}?		{ count(); return(CONSTANT); }
-[1-9]{D}*{IS}?		{ count(); return(CONSTANT); }
+[1-9]{D}*{IS}?		{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 L?'(\\.|[^\\'\n])+'	{ count(); return(CONSTANT); }
 
 {D}+{E}{FS}?		{ count(); return(CONSTANT); }

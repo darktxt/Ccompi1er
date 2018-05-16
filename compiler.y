@@ -148,7 +148,7 @@ logical_or_expression
 	;
 
 conditional_expression
-	: logical_or_expression	{$$=$1;$1->debugInfo(false,true);}
+	: logical_or_expression	{$$=$1;}
 	| logical_or_expression '?' expression ':' conditional_expression
 	;
 

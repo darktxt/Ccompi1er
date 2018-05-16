@@ -2162,7 +2162,7 @@ yyreduce:
 
   case 60:
 #line 151 "compiler.y"
-    {(yyval.Node)=(yyvsp[(1) - (1)].Node);(yyvsp[(1) - (1)].Node)->debugInfo(false,true);;}
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
     break;
 
   case 63:
