@@ -172,7 +172,7 @@ assignment_operator
 	;
 
 expression
-	: assignment_expression
+	: assignment_expression		{$$=$1}
 	| expression ',' assignment_expression
 	;
 

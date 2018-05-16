@@ -4,6 +4,7 @@
 extern FILE *yyin;
 using namespace std;
 extern node* root;
+int yyparse();
 int main()
 {
 	yyin = fopen("test.c","r");
