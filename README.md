@@ -1,11 +1,24 @@
 # Ccompiler
 
-### 已实现 
+### 已实现
+ 
 ```
-inline void main(double x)
+inline float test()
+
 {
-    static int y;
-    y=x;
+
+	int a=2,b=3;
+
+	a = 1;
+
+}
+
+void main(int x,int y)
+
+{
+
+	int b;
+
 }
 ```
 ---

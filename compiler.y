@@ -193,7 +193,7 @@ declaration_specifiers
 	| type_qualifier								{$$=$1;}
 	| type_qualifier declaration_specifiers						{$$=new node("declaration_specifiers",NULL,0);$$->addContents(2,$1,$2);}//Also a sweet drug.
 	| function_specifier								{$$=$1;}//inline
-	| function_specifier declaration_specifiers					{$$=new node("declaration_specifiers",NULL,0);}//Risk of "inline inline int"
+	| function_specifier declaration_specifiers					{$$=new node("declaration_specifiers",NULL,0);$$->addContents(2,$1,$2);}//Risk of "inline inline int"
 	;
 
 init_declarator_list
@@ -203,7 +203,7 @@ init_declarator_list
 
 init_declarator
 	: declarator									{$$=$1;}
-	| declarator '=' initializer							//wait to be updated...
+	| declarator '=' initializer							{$$=new node("init_declarator",NULL,0);$$->addContents(2,$1,$3);}
 	;
 
 storage_class_specifier
@@ -380,7 +380,7 @@ direct_abstract_declarator
 	;
 
 initializer
-	: assignment_expression
+	: assignment_expression										{$$=$1;}
 	| '{' initializer_list '}'
 	| '{' initializer_list ',' '}'
 	;

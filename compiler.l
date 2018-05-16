@@ -41,7 +41,7 @@ void yyerror(char const *s);
 "goto"			{ count(); return(GOTO); }
 "if"			{ count(); return(IF); }
 "_Imaginary"		{ count(); /*I abandon this. @txt*/return(IMAGINARY); }
-"inline"		{ count(); return(INLINE); }
+"inline"		{ count(); yylval.Element = new element(yylineno,"function_specifier","inline");return(INLINE); }
 "int"			{ count(); yylval.Element = new element(yylineno,"type_specifier","int"); return(INT); }
 "long"			{ count(); yylval.Element = new element(yylineno,"type_specifier","long"); return(LONG); }
 "register"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","register");return(REGISTER); }
