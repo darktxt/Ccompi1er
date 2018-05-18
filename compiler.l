@@ -31,15 +31,15 @@ void yyerror(char const *s);
 "const"			{ count(); yylval.Element = new element(yylineno,"type_qualifier","const");return(CONST); }
 "continue"		{ count(); return(CONTINUE); }
 "default"		{ count(); return(DEFAULT); }
-"do"			{ count(); return(DO); }
+"do"			{ count(); yylval.Element = new element(yylineno, "iteration_specifier", "do"); return(DO); }
 "double"		{ count(); yylval.Element = new element(yylineno,"type_specifier","double"); return(DOUBLE); }
-"else"			{ count(); return(ELSE); }
+"else"			{ count(); yylval.Element = new element(yylineno, "selection_specifier", "else"); return(ELSE); }
 "enum"			{ count(); return(ENUM); }
 "extern"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","extern");return(EXTERN); }
 "float"			{ count(); yylval.Element = new element(yylineno,"type_specifier","float"); return(FLOAT); }
-"for"			{ count(); return(FOR); }
+"for"			{ count(); yylval.Element = new element(yylineno, "iteration_specifier", "for"); return(FOR); }
 "goto"			{ count(); return(GOTO); }
-"if"			{ count(); return(IF); }
+"if"			{ count(); yylval.Element = new element(yylineno, "selection_specifier", "if"); return(IF); }
 "_Imaginary"		{ count(); /*I abandon this. @txt*/return(IMAGINARY); }
 "inline"		{ count(); yylval.Element = new element(yylineno,"function_specifier","inline");return(INLINE); }
 "int"			{ count(); yylval.Element = new element(yylineno,"type_specifier","int"); return(INT); }
@@ -52,13 +52,13 @@ void yyerror(char const *s);
 "sizeof"		{ count(); return(SIZEOF); }
 "static"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","static");return(STATIC); }
 "struct"		{ count(); return(STRUCT); }
-"switch"		{ count(); return(SWITCH); }
+"switch"		{ count(); yylval.Element = new element(yylineno, "selection_specifier", "swtich"); return(SWITCH); }
 "typedef"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","typedef");return(TYPEDEF); }
 "union"			{ count(); return(UNION); }
 "unsigned"		{ count(); yylval.Element = new element(yylineno,"type_specifier","unsigned");return(UNSIGNED); }
 "void"			{ count(); yylval.Element = new element(yylineno,"type_specifier","void"); return(VOID); }
 "volatile"		{ count(); yylval.Element = new element(yylineno,"type_qualifier","volatile");return(VOLATILE); }
-"while"			{ count(); return(WHILE); }
+"while"			{ count(); yylval.Element = new element(yylineno, "iteration_specifier", "while"); return(WHILE); }
 
 {L}({L}|{D})*		{ count();yylval.Element = new element(yylineno,"IDENTIFIER",yytext); return(check_type()); }
 
