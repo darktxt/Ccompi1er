@@ -410,8 +410,8 @@ statement
 	: labeled_statement
 	| compound_statement
 	| expression_statement	{$$=$1;}
-	| selection_statement
-	| iteration_statement
+	| selection_statement	{$$=$1;}
+	| iteration_statement	{$$=$1;}
 	| jump_statement
 	;
 
@@ -442,18 +442,18 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expression ')' statement
-	| IF '(' expression ')' statement ELSE statement
-	| SWITCH '(' expression ')' statement
+	: IF '(' expression ')' statement					{$$=new node("if_statement", NULL, 0); $$->addSub(2,$3,$5);}
+	| IF '(' expression ')' statement ELSE statement	{$$=new node("if_else_statement", NULL, 0); $$->addSub(3,$3,$5,$7);}
+	| SWITCH '(' expression ')' statement				{$$=new node("switch_statement", NULL, 0); $$->addSub(2,$3,$5);}
 	;
 
 iteration_statement
-	: WHILE '(' expression ')' statement
-	| DO statement WHILE '(' expression ')' ';'
-	| FOR '(' expression_statement expression_statement ')' statement
-	| FOR '(' expression_statement expression_statement expression ')' statement
-	| FOR '(' declaration expression_statement ')' statement
-	| FOR '(' declaration expression_statement expression ')' statement
+	: WHILE '(' expression ')' statement				{$$=new node("while_statement", NULL, 0); $$->addSub(2,$3,$5);}
+	| DO statement WHILE '(' expression ')' ';'			{$$=new node("do_while_statement", NULL, 0); $$->addSub(2,$2,$5);}
+	| FOR '(' expression_statement expression_statement ')' statement		{$$=new node("for_statement_exp2", NULL, 0); $$->addSub(3,$3,$4,$6);}
+	| FOR '(' expression_statement expression_statement expression ')' statement		{$$=new node("for_statement_exp3", NULL, 0); $$->addSub(4,$3,$4,$5,$7);}
+	| FOR '(' declaration expression_statement ')' statement				{$$=new node("for_statement_dcl2", NULL, 0); $$->addSub(3,$3,$4,$6);}
+	| FOR '(' declaration expression_statement expression ')' statement		{$$=new node("for_statement_dcl3", NULL, 0); $$->addSub(4,$3,$4,$5,$7);}
 	;
 
 jump_statement
