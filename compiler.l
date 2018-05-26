@@ -62,67 +62,67 @@ void yyerror(char const *s);
 
 {L}({L}|{D})*		{ count();yylval.Element = new element(yylineno,"IDENTIFIER",yytext); return(check_type()); }
 
-0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
-0[0-7]*{IS}?		{ count(); return(CONSTANT); }
+0[xX]{H}+{IS}?		{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
+0[0-7]*{IS}?		{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 [1-9]{D}*{IS}?		{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
-L?'(\\.|[^\\'\n])+'	{ count(); return(CONSTANT); }
+L?'(\\.|[^\\'\n])+'	{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 
-{D}+{E}{FS}?		{ count(); return(CONSTANT); }
-{D}*"."{D}+{E}?{FS}?	{ count(); return(CONSTANT); }
-{D}+"."{D}*{E}?{FS}?	{ count(); return(CONSTANT); }
-0[xX]{H}+{P}{FS}?	{ count(); return(CONSTANT); }
-0[xX]{H}*"."{H}+{P}{FS}?     { count(); return(CONSTANT); }
-0[xX]{H}+"."{H}*{P}{FS}?     { count(); return(CONSTANT); }
+{D}+{E}{FS}?		{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
+{D}*"."{D}+{E}?{FS}?	{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
+{D}+"."{D}*{E}?{FS}?	{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
+0[xX]{H}+{P}{FS}?	{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
+0[xX]{H}*"."{H}+{P}{FS}?     { count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
+0[xX]{H}+"."{H}*{P}{FS}?     { count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 
 
-L?\"(\\.|[^\\"\n])*\"	{ count(); return(STRING_LITERAL); }
+L?\"(\\.|[^\\"\n])*\"	{ count(); yylval.Element = new element(yylineno,"STRING_LITERAL",yytext);return(STRING_LITERAL); }
 
-"..."			{ count(); return(ELLIPSIS); }
-">>="			{ count(); return(RIGHT_ASSIGN); }
-"<<="			{ count(); return(LEFT_ASSIGN); }
-"+="			{ count(); return(ADD_ASSIGN); }
-"-="			{ count(); return(SUB_ASSIGN); }
-"*="			{ count(); return(MUL_ASSIGN); }
-"/="			{ count(); return(DIV_ASSIGN); }
-"%="			{ count(); return(MOD_ASSIGN); }
-"&="			{ count(); return(AND_ASSIGN); }
-"^="			{ count(); return(XOR_ASSIGN); }
-"|="			{ count(); return(OR_ASSIGN); }
-">>"			{ count(); return(RIGHT_OP); }
-"<<"			{ count(); return(LEFT_OP); }
-"++"			{ count(); return(INC_OP); }
-"--"			{ count(); return(DEC_OP); }
-"->"			{ count(); return(PTR_OP); }
-"&&"			{ count(); return(AND_OP); }
-"||"			{ count(); return(OR_OP); }
-"<="			{ count(); return(LE_OP); }
-">="			{ count(); return(GE_OP); }
-"=="			{ count(); return(EQ_OP); }
-"!="			{ count(); return(NE_OP); }
+"..."			{ count(); yylval.Element = new element(yylineno,"ELLIPSIS",yytext);return(ELLIPSIS); }
+">>="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(RIGHT_ASSIGN); }
+"<<="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(LEFT_ASSIGN); }
+"+="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(ADD_ASSIGN); }
+"-="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(SUB_ASSIGN); }
+"*="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(MUL_ASSIGN); }
+"/="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(DIV_ASSIGN); }
+"%="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(MOD_ASSIGN); }
+"&="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(AND_ASSIGN); }
+"^="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(XOR_ASSIGN); }
+"|="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(OR_ASSIGN); }
+">>"			{ count(); yylval.Element = new element(yylineno,"RIGHT_OP",yytext);return(RIGHT_OP); }
+"<<"			{ count(); yylval.Element = new element(yylineno,"LEFT_OP",yytext);return(LEFT_OP); }
+"++"			{ count(); yylval.Element = new element(yylineno,"INC_OP",yytext);return(INC_OP); }
+"--"			{ count(); yylval.Element = new element(yylineno,"DEC_OP",yytext);return(DEC_OP); }
+"->"			{ count(); yylval.Element = new element(yylineno,"PTR_OP",yytext);return(PTR_OP); }
+"&&"			{ count(); yylval.Element = new element(yylineno,"AND_OP",yytext);return(AND_OP); }
+"||"			{ count(); yylval.Element = new element(yylineno,"OR_OP",yytext);return(OR_OP); }
+"<="			{ count(); yylval.Element = new element(yylineno,"LE_OP",yytext);return(LE_OP); }
+">="			{ count(); yylval.Element = new element(yylineno,"GE_OP",yytext);return(GE_OP); }
+"=="			{ count(); yylval.Element = new element(yylineno,"EQ_OP",yytext);return(EQ_OP); }
+"!="			{ count(); yylval.Element = new element(yylineno,"NE_OP",yytext);return(NE_OP); }
 ";"			{ count(); return(';'); }
 ("{"|"<%")		{ count(); return('{'); }
 ("}"|"%>")		{ count(); return('}'); }
 ","			{ count(); return(','); }
 ":"			{ count(); return(':'); }
-"="			{ count(); return('='); }
+"="			{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return('='); }
 "("			{ count(); return('('); }
 ")"			{ count(); return(')'); }
 ("["|"<:")		{ count(); return('['); }
 ("]"|":>")		{ count(); return(']'); }
 "."			{ count(); return('.'); }
-"&"			{ count(); return('&'); }
-"!"			{ count(); return('!'); }
-"~"			{ count(); return('~'); }
-"-"			{ count(); return('-'); }
-"+"			{ count(); return('+'); }
-"*"			{ count(); return('*'); }
-"/"			{ count(); return('/'); }
-"%"			{ count(); return('%'); }
-"<"			{ count(); return('<'); }
-">"			{ count(); return('>'); }
-"^"			{ count(); return('^'); }
-"|"			{ count(); return('|'); }
-"?"			{ count(); return('?'); }
+"&"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('&'); }
+"!"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('!'); }
+"~"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('~'); }
+"-"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('-'); }
+"+"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('+'); }
+"*"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('*'); }
+"/"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('/'); }
+"%"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('%'); }
+"<"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('<'); }
+">"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('>'); }
+"^"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('^'); }
+"|"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('|'); }
+"?"			{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('?'); }
 
 [ \t\v\n\f]		{ count(); }
 .			{ /* Add code to complain about unmatched characters */ }

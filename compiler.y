@@ -24,12 +24,12 @@ node* root = NULL;
 %token <Element> CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
 %token <Element> BOOL COMPLEX IMAGINARY
 %token <Element> STRUCT UNION ENUM ELLIPSIS
-
+%token <Element> '&' '*' '+' '-' '~' '!' '/' '<' '>' '^' '|' '%' '='
 %token <Element> CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 %type <Node> primary_expression postfix_expression argument_expression_list unary_expression unary_operator
-%type <Node> multiplicative_expression additive_expression shift_expression relational_expression equality_expression cast_expression
-%type <Node> and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression
-%type <Node> assignment_expression assignment_operator expression conditional_expression
+%type <Node> multiplicative_expression additive_expression shift_expression relational_expression equality_expression cast_expression 
+%type <Node> and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression 
+%type <Node> assignment_expression assignment_operator expression conditional_expression constant_expression
 %type <Node> declaration init_declarator_list init_declarator type_specifier declaration_specifiers storage_class_specifier type_qualifier function_specifier
 %type <Node> declarator direct_declarator 
 %type <Node> parameter_list parameter_declaration identifier_list parameter_type_list
@@ -43,132 +43,132 @@ node* root = NULL;
 
 primary_expression
 	: IDENTIFIER			{$$=new node("primary_expression",NULL,1,$1);}
-	| CONSTANT				{$$=new node("primary_expression",NULL,1,$1);}
-	| STRING_LITERAL		
-	| '(' expression ')'	{$$=$2;}
+	| CONSTANT			{$$=new node("primary_expression",NULL,1,$1);}
+	| STRING_LITERAL		{$$=new node("primary_expression",NULL,1,$1);}
+	| '(' expression ')'		{$$=$2;}
 	;
 
 postfix_expression
-	: primary_expression	{$$=$1;}
-	| postfix_expression '[' expression ']'
-	| postfix_expression '(' ')'
-	| postfix_expression '(' argument_expression_list ')'
-	| postfix_expression '.' IDENTIFIER
-	| postfix_expression PTR_OP IDENTIFIER
-	| postfix_expression INC_OP
-	| postfix_expression DEC_OP
-	| '(' type_name ')' '{' initializer_list '}'
-	| '(' type_name ')' '{' initializer_list ',' '}'
+	: primary_expression						{$$=$1;}
+	| postfix_expression '[' expression ']'				{node* t=$1;while(t->next)t=t->next;t->next=$3;}
+	| postfix_expression '(' ')'					//abandoned
+	| postfix_expression '(' argument_expression_list ')'		{node* t=$1;while(t->next)t=t->next;t->next=$3;}
+	| postfix_expression '.' IDENTIFIER				//abandoned
+	| postfix_expression PTR_OP IDENTIFIER				//abandoned
+	| postfix_expression INC_OP					//wait to be updated
+	| postfix_expression DEC_OP					//wait to be updated
+	| '(' type_name ')' '{' initializer_list '}'			//abandoned
+	| '(' type_name ')' '{' initializer_list ',' '}'		//abandoned
 	;
 
 argument_expression_list
-	: assignment_expression
-	| argument_expression_list ',' assignment_expression
+	: assignment_expression						{$$=$1;}
+	| argument_expression_list ',' assignment_expression		{node* t=$1;while(t->next)t=t->next;t->next=$3;}
 	;
 
 unary_expression
-	: postfix_expression	{$$=$1;}
-	| INC_OP unary_expression
-	| DEC_OP unary_expression
-	| unary_operator cast_expression
-	| SIZEOF unary_expression
-	| SIZEOF '(' type_name ')'
+	: postfix_expression						{$$=$1;}
+	| INC_OP unary_expression					//wait to be updated
+	| DEC_OP unary_expression					//wait to be updated
+	| unary_operator cast_expression				//abandoned?
+	| SIZEOF unary_expression					//abandoned
+	| SIZEOF '(' type_name ')'					//abandoned
 	;
 
 unary_operator
-	: '&'
-	| '*'
-	| '+'
-	| '-'
-	| '~'
-	| '!'
+	: '&'								{$$=new node("unary_operator",NULL,1,$1);}
+	| '*'								{$$=new node("unary_operator",NULL,1,$1);}
+	| '+'								{$$=new node("unary_operator",NULL,1,$1);}
+	| '-'								{$$=new node("unary_operator",NULL,1,$1);}
+	| '~'								{$$=new node("unary_operator",NULL,1,$1);}
+	| '!'								{$$=new node("unary_operator",NULL,1,$1);}
 	;
 
 cast_expression
-	: unary_expression	{$$=$1;}
-	| '(' type_name ')' cast_expression
+	: unary_expression						{$$=$1;}
+	| '(' type_name ')' cast_expression				//abandoned
 	;
 
 multiplicative_expression
-	: cast_expression	{$$=$1;}
-	| multiplicative_expression '*' cast_expression
-	| multiplicative_expression '/' cast_expression
-	| multiplicative_expression '%' cast_expression
+	: cast_expression						{$$=$1;}
+	| multiplicative_expression '*' cast_expression			{$$=new node("multiplicative_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| multiplicative_expression '/' cast_expression			{$$=new node("multiplicative_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| multiplicative_expression '%' cast_expression			{$$=new node("multiplicative_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 additive_expression
-	: multiplicative_expression	{$$=$1;}
-	| additive_expression '+' multiplicative_expression
-	| additive_expression '-' multiplicative_expression
+	: multiplicative_expression					{$$=$1;}
+	| additive_expression '+' multiplicative_expression		{$$=new node("additive_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| additive_expression '-' multiplicative_expression		{$$=new node("additive_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 shift_expression
-	: additive_expression	{$$=$1;}
-	| shift_expression LEFT_OP additive_expression
-	| shift_expression RIGHT_OP additive_expression
+	: additive_expression						{$$=$1;}
+	| shift_expression LEFT_OP additive_expression			{$$=new node("shift_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| shift_expression RIGHT_OP additive_expression			{$$=new node("shift_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 relational_expression
-	: shift_expression	{$$=$1;}
-	| relational_expression '<' shift_expression
-	| relational_expression '>' shift_expression
-	| relational_expression LE_OP shift_expression
-	| relational_expression GE_OP shift_expression
+	: shift_expression						{$$=$1;}
+	| relational_expression '<' shift_expression			{$$=new node("relational_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| relational_expression '>' shift_expression			{$$=new node("relational_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| relational_expression LE_OP shift_expression			{$$=new node("relational_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| relational_expression GE_OP shift_expression			{$$=new node("relational_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 equality_expression
-	: relational_expression	{$$=$1;}
-	| equality_expression EQ_OP relational_expression
-	| equality_expression NE_OP relational_expression
+	: relational_expression						{$$=$1;}
+	| equality_expression EQ_OP relational_expression		{$$=new node("equality_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
+	| equality_expression NE_OP relational_expression		{$$=new node("equality_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 and_expression
-	: equality_expression	{$$=$1;}
-	| and_expression '&' equality_expression
+	: equality_expression						{$$=$1;}
+	| and_expression '&' equality_expression			{$$=new node("and_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 exclusive_or_expression
-	: and_expression		{$$=$1;}
-	| exclusive_or_expression '^' and_expression
+	: and_expression						{$$=$1;}
+	| exclusive_or_expression '^' and_expression			{$$=new node("exclusive_or_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 inclusive_or_expression
-	: exclusive_or_expression	{$$=$1;}
-	| inclusive_or_expression '|' exclusive_or_expression
+	: exclusive_or_expression					{$$=$1;}
+	| inclusive_or_expression '|' exclusive_or_expression		{$$=new node("exclusive_or_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 logical_and_expression
-	: inclusive_or_expression	{$$=$1;}
-	| logical_and_expression AND_OP inclusive_or_expression
+	: inclusive_or_expression					{$$=$1;}
+	| logical_and_expression AND_OP inclusive_or_expression		{$$=new node("logical_and_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 logical_or_expression
-	: logical_and_expression	{$$=$1;}
-	| logical_or_expression OR_OP logical_and_expression
+	: logical_and_expression					{$$=$1;}
+	| logical_or_expression OR_OP logical_and_expression		{$$=new node("logical_or_expression",NULL,0); $$->addSub(3,$1,new node("unary_operator",NULL,1,$2),$3);}
 	;
 
 conditional_expression
-	: logical_or_expression	{$$=$1;}
-	| logical_or_expression '?' expression ':' conditional_expression
+	: logical_or_expression							{$$=$1;}
+	| logical_or_expression '?' expression ':' conditional_expression	{$$=new node("conditional_expression",NULL,0); $$->addSub(3,$1,$3,$5);}
 	;
 
 assignment_expression
-	: conditional_expression	
-	| unary_expression assignment_operator assignment_expression	{$$=new node("assignment_expression",NULL,0);$$->addContents(2,$1,$3);}
+	: conditional_expression					{$$=$1;}
+	| unary_expression assignment_operator assignment_expression	{$$=new node("assignment_expression",NULL,0);$$->addContents(3,$1,$2,$3);}
 	;
 
 assignment_operator
-	: '='
-	| MUL_ASSIGN
-	| DIV_ASSIGN
-	| MOD_ASSIGN
-	| ADD_ASSIGN
-	| SUB_ASSIGN
-	| LEFT_ASSIGN
-	| RIGHT_ASSIGN
-	| AND_ASSIGN
-	| XOR_ASSIGN
-	| OR_ASSIGN
+	: '='								{$$=new node("assignment_operator",NULL,1,$1);}
+	| MUL_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| DIV_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| MOD_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| ADD_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| SUB_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| LEFT_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| RIGHT_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| AND_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| XOR_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
+	| OR_ASSIGN							{$$=new node("assignment_operator",NULL,1,$1);}
 	;
 
 expression
@@ -177,7 +177,7 @@ expression
 	;
 
 constant_expression
-	: conditional_expression
+	: conditional_expression							{$$=$1;}
 	;
 
 declaration
@@ -457,7 +457,7 @@ iteration_statement
 	;
 
 jump_statement
-	: GOTO IDENTIFIER ';'
+	: GOTO IDENTIFIER ';'										//no use
 	| CONTINUE ';'
 	| BREAK ';'
 	| RETURN ';'
@@ -473,7 +473,7 @@ translation_unit
 	;
 
 external_declaration
-	: function_definition													{$$=$1;}
+	: function_definition														{$$=$1;}
 	| declaration															{$$=$1;}
 	;
 
