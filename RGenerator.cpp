@@ -127,9 +127,19 @@ public:
                 loop(t,r);
             }
             else if (t->type.compare("declaration")==0){
+<<<<<<< HEAD
                 // cout << "Not done-----------" << t->type << endl;
 				r->setVar(t->contents[1]->content,t->contents[0]->content);
                 loop(t,r);
+=======
+				string ttype = t->sub[0]->contents[0]->content;
+                for(int i=0;i<t->sub[1]->sub.size();i++){
+					node* tt = t->sub[1]->sub[i];
+					//cout<<"debug----"<<tt->contents[0]->content<<endl;
+					r->setVar(tt->contents[0]->content,ttype);
+					loop(tt,r);
+				}
+>>>>>>> cbcf793f8b0f607e2fdeaaadac9ded2e0f144b89
             }
 			else if (t->type.find("expression")!=-1&&t->type.compare("conditional_expression2")!=0){
 				node* tt=t->sub[0];
@@ -165,6 +175,7 @@ public:
 				
 				if(r2.compare("=")==0){
 					cout<<r1<<" = "<<r3<<endl;
+					value = r1;
 				}
 				else{
 					l = string("Temp").append(itoa(r->getTemp()));

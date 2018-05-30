@@ -22,6 +22,11 @@ public:
 		for(int i=0;i<eleNum;i++)
 			contents.push_back(va_arg(ap, element*));
 	}
+	node* copy(){
+		node* t = new node(type,next,0);
+		t->contents=contents;
+		return t;
+	}
 	void reName(string newtype){
 		type = newtype;
 	}
@@ -56,7 +61,7 @@ public:
 				cout << t->contents[i]->lineNum << "  " << t->contents[i]->name << "  " << t->contents[i]->content << endl;
 			if(expand)
 				for (int i = 0; i < t->sub.size(); i++)
-					{/*cout<<"sub"<<i<<endl;*/t->sub[i]->debugInfo();}
+					{cout<<"sub"<<i<<endl;t->sub[i]->debugInfo();}
 			if(next)
 				t = t->next;
 			else

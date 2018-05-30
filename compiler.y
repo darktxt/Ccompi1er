@@ -182,7 +182,7 @@ constant_expression
 
 declaration
 	: declaration_specifiers ';'							//I don't think we will use this, which supports "int;".
-	| declaration_specifiers init_declarator_list ';'				{$$=new node("declaration",NULL,0);$$->addContents(2,$1,$2);}
+	| declaration_specifiers init_declarator_list ';'				{$$=new node("declaration",NULL,0);$$->addSub(2,$1,$2);}
 	;
 
 declaration_specifiers
@@ -197,13 +197,13 @@ declaration_specifiers
 	;
 
 init_declarator_list
-	: init_declarator								{$$=$1;}
-	| init_declarator_list ',' init_declarator					{$$=new node("init_declarator_list",NULL,0);$$->addContents(2,$1,$3);}						
+	: init_declarator								{$$=new node("init_declarator_list",NULL,0);$$->addSub(1,$1);}
+	| init_declarator_list ',' init_declarator					{$1->addSub(1,$3);$$=$1;}						
 	;
 
 init_declarator
 	: declarator									{$$=$1;}
-	| declarator '=' initializer							{$$=new node("init_declarator",NULL,0);$$->addContents(2,$1,$3);}
+	| declarator '=' initializer							{$$ = $1;node* t = new node("initializer_expression",NULL,0);t->addSub(3,$1->copy(),new node("assignment_operator",NULL,1,$2),$3);$$->addSub(1,t);}
 	;
 
 storage_class_specifier
