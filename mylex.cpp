@@ -1057,7 +1057,7 @@ YY_RULE_SETUP
 case 12:
 YY_RULE_SETUP
 #line 34 "compiler.l"
-{ count(); return(DO); }
+{ count(); yylval.Element = new element(yylineno, "iteration_specifier", "do"); return(DO); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
@@ -1067,7 +1067,7 @@ YY_RULE_SETUP
 case 14:
 YY_RULE_SETUP
 #line 36 "compiler.l"
-{ count(); return(ELSE); }
+{ count(); yylval.Element = new element(yylineno, "selection_specifier", "else"); return(ELSE); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
@@ -1087,7 +1087,7 @@ YY_RULE_SETUP
 case 18:
 YY_RULE_SETUP
 #line 40 "compiler.l"
-{ count(); return(FOR); }
+{ count(); yylval.Element = new element(yylineno, "iteration_specifier", "for"); return(FOR); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
@@ -1097,7 +1097,7 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 42 "compiler.l"
-{ count(); return(IF); }
+{ count(); yylval.Element = new element(yylineno, "selection_specifier", "if"); return(IF); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
@@ -1107,7 +1107,7 @@ YY_RULE_SETUP
 case 22:
 YY_RULE_SETUP
 #line 44 "compiler.l"
-{ count(); return(INLINE); }
+{ count(); yylval.Element = new element(yylineno,"function_specifier","inline");return(INLINE); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
@@ -1162,7 +1162,7 @@ YY_RULE_SETUP
 case 33:
 YY_RULE_SETUP
 #line 55 "compiler.l"
-{ count(); return(SWITCH); }
+{ count(); yylval.Element = new element(yylineno, "selection_specifier", "swtich"); return(SWITCH); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
@@ -1192,7 +1192,7 @@ YY_RULE_SETUP
 case 39:
 YY_RULE_SETUP
 #line 61 "compiler.l"
-{ count(); return(WHILE); }
+{ count(); yylval.Element = new element(yylineno, "iteration_specifier", "while"); return(WHILE); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
@@ -1202,12 +1202,12 @@ YY_RULE_SETUP
 case 41:
 YY_RULE_SETUP
 #line 65 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 66 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
@@ -1217,152 +1217,152 @@ YY_RULE_SETUP
 case 44:
 YY_RULE_SETUP
 #line 68 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 70 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 71 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 72 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
 #line 73 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
 #line 74 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
 #line 75 "compiler.l"
-{ count(); return(CONSTANT); }
+{ count(); yylval.Element = new element(yylineno,"CONSTANT",yytext);return(CONSTANT); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
 #line 78 "compiler.l"
-{ count(); return(STRING_LITERAL); }
+{ count(); yylval.Element = new element(yylineno,"STRING_LITERAL",yytext);return(STRING_LITERAL); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
 #line 80 "compiler.l"
-{ count(); return(ELLIPSIS); }
+{ count(); yylval.Element = new element(yylineno,"ELLIPSIS",yytext);return(ELLIPSIS); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
 #line 81 "compiler.l"
-{ count(); return(RIGHT_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(RIGHT_ASSIGN); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
 #line 82 "compiler.l"
-{ count(); return(LEFT_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(LEFT_ASSIGN); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
 #line 83 "compiler.l"
-{ count(); return(ADD_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(ADD_ASSIGN); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
 #line 84 "compiler.l"
-{ count(); return(SUB_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(SUB_ASSIGN); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
 #line 85 "compiler.l"
-{ count(); return(MUL_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(MUL_ASSIGN); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
 #line 86 "compiler.l"
-{ count(); return(DIV_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(DIV_ASSIGN); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
 #line 87 "compiler.l"
-{ count(); return(MOD_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(MOD_ASSIGN); }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
 #line 88 "compiler.l"
-{ count(); return(AND_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(AND_ASSIGN); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
 #line 89 "compiler.l"
-{ count(); return(XOR_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(XOR_ASSIGN); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
 #line 90 "compiler.l"
-{ count(); return(OR_ASSIGN); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return(OR_ASSIGN); }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
 #line 91 "compiler.l"
-{ count(); return(RIGHT_OP); }
+{ count(); yylval.Element = new element(yylineno,"RIGHT_OP",yytext);return(RIGHT_OP); }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
 #line 92 "compiler.l"
-{ count(); return(LEFT_OP); }
+{ count(); yylval.Element = new element(yylineno,"LEFT_OP",yytext);return(LEFT_OP); }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
 #line 93 "compiler.l"
-{ count(); return(INC_OP); }
+{ count(); yylval.Element = new element(yylineno,"INC_OP",yytext);return(INC_OP); }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
 #line 94 "compiler.l"
-{ count(); return(DEC_OP); }
+{ count(); yylval.Element = new element(yylineno,"DEC_OP",yytext);return(DEC_OP); }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
 #line 95 "compiler.l"
-{ count(); return(PTR_OP); }
+{ count(); yylval.Element = new element(yylineno,"PTR_OP",yytext);return(PTR_OP); }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
 #line 96 "compiler.l"
-{ count(); return(AND_OP); }
+{ count(); yylval.Element = new element(yylineno,"AND_OP",yytext);return(AND_OP); }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
 #line 97 "compiler.l"
-{ count(); return(OR_OP); }
+{ count(); yylval.Element = new element(yylineno,"OR_OP",yytext);return(OR_OP); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
 #line 98 "compiler.l"
-{ count(); return(LE_OP); }
+{ count(); yylval.Element = new element(yylineno,"LE_OP",yytext);return(LE_OP); }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
 #line 99 "compiler.l"
-{ count(); return(GE_OP); }
+{ count(); yylval.Element = new element(yylineno,"GE_OP",yytext);return(GE_OP); }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
 #line 100 "compiler.l"
-{ count(); return(EQ_OP); }
+{ count(); yylval.Element = new element(yylineno,"EQ_OP",yytext);return(EQ_OP); }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
 #line 101 "compiler.l"
-{ count(); return(NE_OP); }
+{ count(); yylval.Element = new element(yylineno,"NE_OP",yytext);return(NE_OP); }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
@@ -1392,7 +1392,7 @@ YY_RULE_SETUP
 case 79:
 YY_RULE_SETUP
 #line 107 "compiler.l"
-{ count(); return('='); }
+{ count(); yylval.Element = new element(yylineno,"assignment_operator",yytext);return('='); }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
@@ -1422,67 +1422,67 @@ YY_RULE_SETUP
 case 85:
 YY_RULE_SETUP
 #line 113 "compiler.l"
-{ count(); return('&'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('&'); }
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
 #line 114 "compiler.l"
-{ count(); return('!'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('!'); }
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
 #line 115 "compiler.l"
-{ count(); return('~'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('~'); }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
 #line 116 "compiler.l"
-{ count(); return('-'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('-'); }
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
 #line 117 "compiler.l"
-{ count(); return('+'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('+'); }
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
 #line 118 "compiler.l"
-{ count(); return('*'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('*'); }
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
 #line 119 "compiler.l"
-{ count(); return('/'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('/'); }
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
 #line 120 "compiler.l"
-{ count(); return('%'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('%'); }
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
 #line 121 "compiler.l"
-{ count(); return('<'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('<'); }
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
 #line 122 "compiler.l"
-{ count(); return('>'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('>'); }
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
 #line 123 "compiler.l"
-{ count(); return('^'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('^'); }
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
 #line 124 "compiler.l"
-{ count(); return('|'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('|'); }
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
 #line 125 "compiler.l"
-{ count(); return('?'); }
+{ count(); yylval.Element = new element(yylineno,"unary_operator",yytext);return('?'); }
 	YY_BREAK
 case 98:
 /* rule 98 can match eol */
