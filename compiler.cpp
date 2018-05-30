@@ -2289,12 +2289,12 @@ yyreduce:
 
   case 60:
 #line 151 "compiler.y"
-    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);(yyval.Node)->reName("conditional_expression1");;}
     break;
 
   case 61:
 #line 152 "compiler.y"
-    {(yyval.Node)=new node("conditional_expression",NULL,0); (yyval.Node)->addSub(3,(yyvsp[(1) - (5)].Node),(yyvsp[(3) - (5)].Node),(yyvsp[(5) - (5)].Node));;}
+    {(yyval.Node)=new node("conditional_expression2",NULL,0); (yyval.Node)->addSub(3,(yyvsp[(1) - (5)].Node),(yyvsp[(3) - (5)].Node),(yyvsp[(5) - (5)].Node));;}
     break;
 
   case 62:
@@ -2304,7 +2304,7 @@ yyreduce:
 
   case 63:
 #line 157 "compiler.y"
-    {(yyval.Node)=new node("assignment_expression",NULL,0);(yyval.Node)->addContents(3,(yyvsp[(1) - (3)].Node),(yyvsp[(2) - (3)].Node),(yyvsp[(3) - (3)].Node));;}
+    {(yyval.Node)=new node("assignment_expression",NULL,0);(yyval.Node)->addSub(3,(yyvsp[(1) - (3)].Node),(yyvsp[(2) - (3)].Node),(yyvsp[(3) - (3)].Node));;}
     break;
 
   case 64:
