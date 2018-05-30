@@ -22,6 +22,9 @@ public:
 		for(int i=0;i<eleNum;i++)
 			contents.push_back(va_arg(ap, element*));
 	}
+	void reName(string newtype){
+		type = newtype;
+	}
 	void addSub(int subNum,...){
 		va_list ap;
 		va_start(ap, subNum);
@@ -53,7 +56,7 @@ public:
 				cout << t->contents[i]->lineNum << "  " << t->contents[i]->name << "  " << t->contents[i]->content << endl;
 			if(expand)
 				for (int i = 0; i < t->sub.size(); i++)
-					t->sub[i]->debugInfo();
+					{/*cout<<"sub"<<i<<endl;*/t->sub[i]->debugInfo();}
 			if(next)
 				t = t->next;
 			else

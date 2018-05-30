@@ -148,13 +148,13 @@ logical_or_expression
 	;
 
 conditional_expression
-	: logical_or_expression							{$$=$1;}
-	| logical_or_expression '?' expression ':' conditional_expression	{$$=new node("conditional_expression",NULL,0); $$->addSub(3,$1,$3,$5);}
+	: logical_or_expression							{$$=$1;$$->reName("conditional_expression1");}
+	| logical_or_expression '?' expression ':' conditional_expression	{$$=new node("conditional_expression2",NULL,0); $$->addSub(3,$1,$3,$5);}
 	;
 
 assignment_expression
 	: conditional_expression					{$$=$1;}
-	| unary_expression assignment_operator assignment_expression	{$$=new node("assignment_expression",NULL,0);$$->addContents(3,$1,$2,$3);}
+	| unary_expression assignment_operator assignment_expression	{$$=new node("assignment_expression",NULL,0);$$->addSub(3,$1,$2,$3);}
 	;
 
 assignment_operator

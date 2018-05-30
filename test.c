@@ -1,7 +1,9 @@
 inline float test()
 {
-	int b,c;
-	int a = 2;
+	int a;
+	int b;
+	float c;
+	a = b == 1+c*b;
 }
 void main(int x,int y)
 {
