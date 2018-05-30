@@ -2,10 +2,9 @@ inline float test()
 {
 	int a;
 	int b;
-	float c;
-	a = b == 1+c*b;
+	float cc = a = b == 1+5*b;
 }
 void main(int x,int y)
 {
-	int b;
+	int b=20;
 }
