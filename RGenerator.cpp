@@ -127,11 +127,6 @@ public:
                 loop(t,r);
             }
             else if (t->type.compare("declaration")==0){
-<<<<<<< HEAD
-                // cout << "Not done-----------" << t->type << endl;
-				r->setVar(t->contents[1]->content,t->contents[0]->content);
-                loop(t,r);
-=======
 				string ttype = t->sub[0]->contents[0]->content;
                 for(int i=0;i<t->sub[1]->sub.size();i++){
 					node* tt = t->sub[1]->sub[i];
@@ -139,7 +134,6 @@ public:
 					r->setVar(tt->contents[0]->content,ttype);
 					loop(tt,r);
 				}
->>>>>>> cbcf793f8b0f607e2fdeaaadac9ded2e0f144b89
             }
 			else if (t->type.find("expression")!=-1&&t->type.compare("conditional_expression2")!=0){
 				node* tt=t->sub[0];
@@ -235,7 +229,21 @@ public:
 				cout << "IF " << resReg << " == 0 GOTO label_" << label_while << endl;
 			}
 
-
+			else if(t->type == "for_statement_exp3"){
+				int label_for = getLabel();
+				int label_start = getLabel();
+				int label_end = getLabel();
+				stratTranslate(t->sub[0],r);
+				cout << "LABEL label_" << label_for <<":" << endl;
+				string resReg = stratTranslate(t->sub[1],r);
+				cout << "IF " << resReg << " == 0 GOTO label_" << label_start << endl;
+				cout << "GOTO label_" << label_end << endl;
+				cout << "LABEL label_" << label_start <<":" << endl;
+				stratTranslate(t->sub[3],r);
+				stratTranslate(t->sub[2],r);
+				cout << "GOTO label_" << label_for << endl;
+				cout << "LABEL label_" << label_end <<":" << endl;
+			}
 
 			t = t->next; 
 		}

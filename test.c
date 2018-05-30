@@ -1,17 +1,17 @@
+
 float test()
 {
 	int a;
-	int b;
-<<<<<<< HEAD
-	do{
-		a = 1;
-	}while(a!=1);
-=======
-	float cc = a = b == 1+5*b,dd = cc * 2;
->>>>>>> cbcf793f8b0f607e2fdeaaadac9ded2e0f144b89
+	int i;
+	for(;i>2;i=3){
+		i=2;
+	}
+	a=（3+4)*5;
 }
+
 
 void main(int x,int y)
 {
-	int b=20;
+	int a;
+	a=20;
 }
