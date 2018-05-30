@@ -1,26 +1,17 @@
 # Ccompiler
 
-### 已实现
+### 已实现(可实现中间代码输出)
  
 ```
 inline float test()
-
 {
-
-	int a=2,b=3;
-
-	a = a > 1+2*3/(b+1);
-
-	a = a>1 ? b+2 :b;
-
-}
-
-void main(int x,int y)
-
-{
-
+	int a;
 	int b;
-
+	float cc = a = b == 1+5*b,dd = cc * 2;
+}
+void main(int x,int y)
+{
+	int b=20;
 }
 ```
 ### 另，已实现 if while for
