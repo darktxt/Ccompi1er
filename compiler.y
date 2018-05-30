@@ -437,7 +437,7 @@ block_item
 	;
 
 expression_statement
-	: ';'
+	: ';'			{$$=new node("null", NULL, 0);}
 	| expression ';'	{$$=$1;}
 	;
 

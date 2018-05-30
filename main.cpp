@@ -10,7 +10,7 @@ int main()
 {
 	yyin = fopen("test.c","r");
 	yyparse();
-	//root->debugInfo(false,true); //show info all the instructions following,no extand
+	root->debugInfo(true,true); //show info all the instructions following,no extand
 	cout<<endl<<endl;
 	//root->next->next->debugInfo(false,true);//only show this instruction,extand
 	cout << endl << "中间树" << endl;
