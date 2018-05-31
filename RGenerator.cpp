@@ -140,8 +140,9 @@ public:
 		string value="";
 		while (t) {
             if(t->type.compare("function_definition")==0){
-                cout << "FUNCTION " << t->contents[1]->content << " :" << endl;
+                cout << "FUNCTION" << t->contents[1]->content << "" << endl;
                 loop(t,r);
+
             }
 
             else if(t->type.compare("parameter_declaration")==0){
@@ -279,7 +280,15 @@ public:
 		while (t) {
             if(t->type.compare("function_definition")==0){
                 cout << "FUNCTION " << t->contents[1]->content << " :" << endl;
-                loop(t,r);
+				if(t->contents[1]->content.find("main")!= -1){
+                	//cout << t->sub[0]->type<<endl;
+					//cout << t->sub[0]->contents[0]->content<<endl;
+					//cout << t->sub.size()<<endl;
+					loop(t,r);
+				}
+				else{
+					loop(t,r);
+				}
             }
 
             else if(t->type.compare("parameter_declaration")==0){
@@ -402,6 +411,14 @@ public:
 				stratTranslate(t->sub[2],r);
 				cout << "GOTO label_" << label_for << endl;
 				cout << "LABEL label_" << label_end <<":" << endl;
+			}
+
+			else if(t->type == "function_call"){
+				cout << "CALL " << t->sub[0]->contents[0]->content << endl;
+				cout << t->sub.size() << endl;
+				if(t->sub.size()==2){
+					cout << "fd" << endl;
+				}
 			}
 
 			t = t->next; 

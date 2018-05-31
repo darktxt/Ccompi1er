@@ -51,8 +51,8 @@ primary_expression
 postfix_expression
 	: primary_expression						{$$=$1;}
 	| postfix_expression '[' expression ']'				{node* t=$1;while(t->next)t=t->next;t->next=$3;}
-	| postfix_expression '(' ')'					//abandoned
-	| postfix_expression '(' argument_expression_list ')'		{node* t=$1;while(t->next)t=t->next;t->next=$3;}
+	| postfix_expression '(' ')'					{$$=new node("function_call",NULL,0);$$->addSub(1,$1);}
+	| postfix_expression '(' argument_expression_list ')'		{cout << "ASD" << endl;$$=new node("function_call",NULL,0);$$->addSub(2,$1,$2);}
 	| postfix_expression '.' IDENTIFIER				//abandoned
 	| postfix_expression PTR_OP IDENTIFIER				//abandoned
 	| postfix_expression INC_OP					//wait to be updated
@@ -148,7 +148,7 @@ logical_or_expression
 	;
 
 conditional_expression
-	: logical_or_expression							{$$=$1;$$->reName("conditional_expression1");}
+	: logical_or_expression							{$$=$1;}
 	| logical_or_expression '?' expression ':' conditional_expression	{$$=new node("conditional_expression2",NULL,0); $$->addSub(3,$1,$3,$5);}
 	;
 
