@@ -7,7 +7,7 @@ float test()
 
 void main()
 {
-	test();
 	int c;
 	c = 3+4;
+	test(1,c,c+1*4*c);
 }

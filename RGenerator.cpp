@@ -20,11 +20,13 @@ private:
 	bool *temps;//false no use
 	int num;
 	VAR *vars;
+	VAR *ARG;
 public:
 	void operator=(const Data& d){
 		num=d.num;
 		temps = new bool [num];	
 		vars = new VAR [num];	
+		ARG = new VAR [num];	
 		for(int i=0;i<num;i++)
 		{
 			temps[i]=d.temps[i];
@@ -78,7 +80,6 @@ public:
 				vars[i].state=true;
 				vars[i].name=name;
 				vars[i].type=type;
-				//cout<<"debug----"<<name<<"   "<<i<<endl;
 				return i;
 			}
 		}
@@ -97,6 +98,23 @@ public:
 	}
 	void releaseVar(int i){
 			vars[i].state=false;
+	}
+
+	int getARG(){
+		for(int i=0;i<num;i++)//find the recent one
+		{
+			if(vars[i].state==false)
+			{
+				vars[i].state = true;
+				return i;
+			}
+		}
+		return -1;
+	}
+	void releaseARG(){
+		for(int i=0;i<num;i++){
+			vars[i].state=false;
+		}
 	}
 };
 
@@ -414,11 +432,32 @@ public:
 			}
 
 			else if(t->type == "function_call"){
-				cout << "CALL " << t->sub[0]->contents[0]->content << endl;
-				cout << t->sub.size() << endl;
+				// have parameter
 				if(t->sub.size()==2){
-					cout << "fd" << endl;
+					node* s = t->sub[1];
+					
+					while(s!=nullptr){
+						int i = r.getARG();
+						if(s->type == "primary_expression"){
+							if(s->contents[0]->name == "CONSTANT"){
+								cout << "ARG" << i << " :=  " <<s->contents[0]->content  << endl;
+							}
+							if(s->contents[0]->name == "IDENTIFIER"){
+								string varname = s->contents[0]->content;
+								cout << "ARG" << i << " :=  Var" << r.getVar(s->contents[0]->content)  << endl;
+							}
+						}
+						else{
+							string res = stratTranslate(s,r);
+							cout << "ARG" << i << " :=  "  << res << endl;
+						}
+						
+						s = s->next;
+					}
+					
 				}
+				cout << "CALL " << t->sub[0]->contents[0]->content << endl;
+				r.releaseARG();
 			}
 
 			t = t->next; 

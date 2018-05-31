@@ -2099,12 +2099,12 @@ yyreduce:
 
   case 9:
 #line 55 "compiler.y"
-    {node* t=(yyvsp[(1) - (4)].Node);while(t->next)t=t->next;t->next=(yyvsp[(3) - (4)].Node);;}
+    {(yyval.Node)=new node("function_call",NULL,0);(yyval.Node)->addSub(2,(yyvsp[(1) - (4)].Node),(yyvsp[(3) - (4)].Node));cout << (yyvsp[(3) - (4)].Node)->type<< endl;;}
     break;
 
   case 16:
 #line 65 "compiler.y"
-    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);cout << "fd" << (yyvsp[(1) - (1)].Node)->type<< endl;;}
     break;
 
   case 17:

@@ -10,6 +10,7 @@
         "initializer_list": "cpp",
         "iterator": "cpp",
         "utility": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "algorithm": "c"
     }
 }
