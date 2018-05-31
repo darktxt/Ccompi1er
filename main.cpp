@@ -20,8 +20,8 @@
 #include "RGenerator.cpp"
 
 extern FILE *yyin;
-using namespace std;
 using namespace llvm;
+using namespace std;
 extern node* root;
 int yyparse();
 int main()
@@ -29,36 +29,33 @@ int main()
 	yyin = fopen("test.c","r");
 	yyparse();
 	//root->debugInfo(false,true); //show info all the instructions following,no extand
-	cout<<endl<<endl;
+	std::cout<<endl<<endl;
 	//root->next->next->debugInfo(false,true);//only show this instruction,extand
-	cout << endl << "中间树" << endl;
+	std::cout << endl << "中间树" << endl;
 	RGenerator translator(root);
 
-	static llvm::LLVMContext myGlobalContext;
-    llvm::LLVMContext &context = myGlobalContext;
-    llvm::Module *module = new llvm::Module("asdf", context);
-    llvm::IRBuilder<> builder(context);
+	static LLVMContext myGlobalContext;
+    LLVMContext &context = myGlobalContext;
+    Module *module = new Module("asdf", context);
+    IRBuilder<> builder(context);
 
-    llvm::FunctionType *funcType = llvm::FunctionType::get(builder.getVoidTy(), false);
-    llvm::Function *mainFunc =
-        llvm::Function::Create(funcType, llvm::Function::ExternalLinkage, "main", module);
-    llvm::BasicBlock *entry = llvm::BasicBlock::Create(context, "entrypoint", mainFunc);
+    FunctionType *funcType = FunctionType::get(builder.getVoidTy(), false);
+    Function *mainFunc =
+        Function::Create(funcType, Function::ExternalLinkage, "main", module);
+    BasicBlock *entry = BasicBlock::Create(context, "entrypoint", mainFunc);
     builder.SetInsertPoint(entry);
 
-    llvm::Value *helloWorld = builder.CreateGlobalStringPtr("hello world!\n");
-
-    std::vector<llvm::Type *> putsArgs;
-    putsArgs.push_back(builder.getInt8Ty()->getPointerTo());
-    llvm::ArrayRef<llvm::Type *> argsRef(putsArgs);
-
-    llvm::FunctionType *putsType =
-        llvm::FunctionType::get(builder.getInt32Ty(), argsRef, false);
-    llvm::Constant *putsFunc = module->getOrInsertFunction("puts", putsType);
-
-    builder.CreateCall(putsFunc, helloWorld);
+    auto L = ConstantInt::get(Type::getInt32Ty(myGlobalContext), 1);
+    auto R = ConstantInt::get(Type::getInt32Ty(myGlobalContext), 2);
+    auto A = builder.CreateAlloca(Type::getInt32Ty(myGlobalContext), NULL, "A");
+    auto B = builder.CreateAlloca(Type::getInt32Ty(myGlobalContext), NULL, "B");
+    builder.CreateStore (L, A, /*isVolatile=*/false);   // A = 1
+    builder.CreateStore (R, B, /*isVolatile=*/false);   // B = 2
+    builder.CreateAdd(A, L, "addtmp");      // addtmp = A + 1
+    builder.CreateAdd(A, B, "addtmp");      // addtmp = A + B
     builder.CreateRetVoid();
 
-    module->print(llvm::errs(), nullptr);
+    module->print(errs(), nullptr);
 
     // Initialize the target registry etc.
     InitializeAllTargetInfos();
