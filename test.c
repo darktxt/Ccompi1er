@@ -1,12 +1,16 @@
 
+int test(){
+	return 2;
+}
+
 void main()
 {
 	int c;
-	for(c=1;c<4;c=c+1){
-		c=7;
-		continue;
-		c=8;
+	int b;
+	int d;
+	d = read();
+	for(c=0;c<d;c=c+1){
+		b = b + test();
 	}
-
-	int b =3;
+	print(b);
 }

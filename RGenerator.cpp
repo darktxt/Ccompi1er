@@ -1,6 +1,8 @@
 #include <iostream>
 #include "node.h"
 #include <string>
+#include <vector>
+using namespace std;
 
 char* itoa(int i){
 	static char str[20];
@@ -111,6 +113,7 @@ class RGenerator{
 	bool isloop;
 	int startlabel;
 	int endlabel;
+	bool func_call_visual = true;
 public:
     RGenerator(node* root){
         this->root = root;
@@ -206,9 +209,10 @@ public:
                 }
 				else{
 					if(tt->type == "function_call"){
+						func_call_visual = false;
 						stratTranslate(tt,r);
 						int i = r.getTemp();
-						cout << "Temp" << i << " := CALL " << tt->sub[0]->contents[0]->content << endl;
+						cout << "Temp" << i << " = CALL " << tt->sub[0]->contents[0]->content << endl;
 						r3 = string("Temp") + to_string(i);
 						r.releaseTemp(i);
 					}
@@ -238,9 +242,9 @@ public:
 				int label_false = getLabel();
 				cout << "IF " << resReg << " == 0 GOTO label_" << label_true << endl;
 				cout << "GOTO label_" << label_false << endl;
-				cout << "LABEL label_" << label_true<<":" << endl;
+				cout << "LABEL label_" << label_true<<" :" << endl;
 				stratTranslate(t->sub[1],r);
-				cout << "LABEL label_" << label_false <<":" << endl;
+				cout << "LABEL label_" << label_false <<" :" << endl;
 			}
 
 
@@ -249,14 +253,14 @@ public:
 				int label_false = getLabel();
 				int label_next = getLabel();
 				string resReg = stratTranslate(t->sub[0],r);
-				cout << "IF " << resReg << " == 0 GOTO label_" << label_true << endl;
+				cout << "IF " << resReg << " != 0 GOTO label_" << label_true << endl;
 				cout << "GOTO label_" << label_false << endl;
-				cout << "LABEL label_" << label_true<<":" << endl;
+				cout << "LABEL label_" << label_true<<" :" << endl;
 				stratTranslate(t->sub[1],r);
 				cout << "GOTO label_" << label_next << endl;
-				cout << "LABEL label_" << label_false <<":" << endl;
+				cout << "LABEL label_" << label_false <<" :" << endl;
 				stratTranslate(t->sub[2],r);
-				cout << "LABEL label_" << label_next <<":" << endl;
+				cout << "LABEL label_" << label_next <<" :" << endl;
 			}
 
 			else if(t->type == "break"){
@@ -275,26 +279,26 @@ public:
 				startlabel = label_while;
 				endlabel = label_end;
 
-				cout << "LABEL label_" << label_while <<":" << endl;
+				cout << "LABEL label_" << label_while <<" :" << endl;
 				string resReg = stratTranslate(t->sub[0],r);
-				cout << "IF " << resReg << " == 0 GOTO label_" << label_start << endl;
+				cout << "IF " << resReg << " != 0 GOTO label_" << label_start << endl;
 				cout << "GOTO label_" << label_end << endl;
-				cout << "LABEL label_" << label_start <<":" << endl;
+				cout << "LABEL label_" << label_start <<" :" << endl;
 				stratTranslate(t->sub[1],r);
 				cout << "GOTO label_" << label_while << endl;
-				cout << "LABEL label_" << label_end <<":" << endl;
+				cout << "LABEL label_" << label_end <<" :" << endl;
 			}
 
 			else if(t->type == "do_while_statement"){
 				int beginlabel = getLabel();
 				startlabel = getLabel();
 				endlabel = getLabel();
-				cout << "LABEL label_" << beginlabel <<":" << endl;
+				cout << "LABEL label_" << beginlabel <<" :" << endl;
 				stratTranslate(t->sub[0],r);
-				cout << "LABEL label_" << startlabel <<":" << endl;
+				cout << "LABEL label_" << startlabel <<" :" << endl;
 				string resReg = stratTranslate(t->sub[1],r);
-				cout << "IF " << resReg << " == 0 GOTO label_" << beginlabel << endl;
-				cout << "LABEL label_" << endlabel <<":" << endl;
+				cout << "IF " << resReg << " != 0 GOTO label_" << beginlabel << endl;
+				cout << "LABEL label_" << endlabel <<" :" << endl;
 
 			}
 
@@ -303,44 +307,58 @@ public:
 				int label_start = getLabel();
 				endlabel = getLabel();
 				stratTranslate(t->sub[0],r);
-				cout << "LABEL label_" << startlabel <<":" << endl;
+				cout << "LABEL label_" << startlabel <<" :" << endl;
 				string resReg = stratTranslate(t->sub[1],r);
-				cout << "IF " << resReg << " == 0 GOTO label_" << label_start << endl;
+				cout << "IF " << resReg << " != 0 GOTO label_" << label_start << endl;
 				cout << "GOTO label_" << endlabel << endl;
-				cout << "LABEL label_" << label_start <<":" << endl;
+				cout << "LABEL label_" << label_start <<" :" << endl;
 				stratTranslate(t->sub[3],r);
 				stratTranslate(t->sub[2],r);
 				cout << "GOTO label_" << startlabel << endl;
-				cout << "LABEL label_" << endlabel <<":" << endl;
+				cout << "LABEL label_" << endlabel <<" :" << endl;
 			}
 
 			else if(t->type == "function_call"){
 				// have parameter
 				if(t->sub.size()==2){
 					node* s = t->sub[1];
+					vector<string> ARG;
 					while(s!=nullptr){
 						if(s->type == "primary_expression"){
 							if(s->contents[0]->name == "CONSTANT"){
 								int i = r.getTemp();
-								cout << "Temp" << i << " := #" << s->contents[0]->content <<endl;
-								cout << "ARG" << "  " << "Temp" << i  << endl;
+								cout << "Temp" << i << " = #" << s->contents[0]->content <<endl;
+								//cout << "ARG" << "  " << "Temp" << i  << endl;
+								string argname = "Temp";
+								argname += to_string(i);
+								ARG.push_back(argname);
 								r.releaseTemp(i);
 							}
 							if(s->contents[0]->name == "IDENTIFIER"){
 								string varname = s->contents[0]->content;
-								cout << "ARG" << "  Var" << r.getVar(s->contents[0]->content)  << endl;
+								//cout << "ARG" << "  Var" << r.getVar(s->contents[0]->content)  << endl;
+								string argname = "var";
+								argname += to_string(r.getVar(s->contents[0]->content));
+								ARG.push_back(argname);
 							}
 						}
 						else{
 							string res = stratTranslate(s,r);
-							cout << "ARG" << " "  << res << endl;
+							//cout << "ARG" << " "  << res << endl;
+							ARG.push_back(res);
 						}
-						
+						for(int j=ARG.size()-1;j>=0;j--){
+							cout << "ARG" << " "  << ARG[j] << endl;
+						}
 						s = s->next;
 					}
 					
 				}
-				cout << "CALL " << t->sub[0]->contents[0]->content << endl;
+				if(func_call_visual == true)
+					cout << "CALL " << t->sub[0]->contents[0]->content << endl;
+				else{
+					func_call_visual = true;
+				}
 			}
 
 			else if(t->type == "return_statement"){
@@ -352,10 +370,14 @@ public:
 					string res;
 					if(s->type == "primary_expression"){
 						if(s->contents[0]->name == "CONSTANT"){
-							res = s->contents[0]->content;
+							int i = r.getTemp();
+							cout << "Temp" << i << " = #" << s->contents[0]->content << endl;
+							res = "Temp";
+							res = res + to_string(i);
 						}
 						if(s->contents[0]->name == "IDENTIFIER"){
-							res = s->contents[0]->content;
+							res = "var ";
+							res += r.getVar(s->contents[0]->content);
 						}
 					}
 					else{
@@ -364,12 +386,9 @@ public:
 					cout << "RETURN " << res << endl;
 				}
 			}
-			
-
 			t = t->next; 
 		}
 		return value;
-			
 	}        
 	
 	void loop(node* t,Data* r){
