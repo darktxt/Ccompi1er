@@ -158,7 +158,7 @@ public:
 			labels[i]=false;
 		}
         stratTranslate(this->root,r);
-		printf("\n");
+		printf("end\n");
 		module->print(errs(), nullptr);
     }
 
@@ -208,14 +208,16 @@ public:
                 if(tt->sub.size()==0){
 					if(tt->contents[0]->name.compare("IDENTIFIER")==0) {
 						r1 = string("var").append(itoa(r->getVar(tt->contents[0]->content)));
-						var_map[r1] = var_map[tt->contents[0]->content];
+						// r1 = var
 					}
 					else if(tt->contents[0]->name.compare("CONSTANT")==0){
 						int i = r->getTemp();
 						cout<<"Temp"<<itoa(i)<<" = "<<"#"<<tt->contents[0]->content<<endl;
 						r1 = string("Temp").append(itoa(i));
 						// int for now
-						var_map[r1] = ConstantInt::get(Type::getInt32Ty(context), stoi(tt->contents[0]->content)); 
+						// auto number = ConstantInt::get(Type::getInt32Ty(context), stoi(tt->contents[0]->content));
+						// auto var = builder.CreateAlloca(Type::getInt32Ty(context), NULL, r1);
+						// var_map[r1] = builder.CreateStore(var, number);
 					}						
                 }
 				else
@@ -226,14 +228,16 @@ public:
 				if(tt->sub.size()==0){
 					if(tt->contents[0]->name.compare("IDENTIFIER")==0) {
 						r3 = string("var").append(itoa(r->getVar(tt->contents[0]->content)));
-						var_map[r3] = var_map[tt->contents[0]->content];
+						// var_map[r3] = var_map[tt->contents[0]->content];
 					}
 					else if(tt->contents[0]->name.compare("CONSTANT")==0){
 						int i = r->getTemp();
 						cout<<"Temp"<<itoa(i)<<" = "<<"#"<<tt->contents[0]->content<<endl;
 						r3 = string("Temp").append(itoa(i));
 						// int for now
-						var_map[r3] = ConstantInt::get(Type::getInt32Ty(context), stoi(tt->contents[0]->content)); 
+						auto number = ConstantInt::get(Type::getInt32Ty(context), stoi(tt->contents[0]->content));
+						var_map[r3]= builder.CreateAlloca(Type::getInt32Ty(context), NULL, r3);
+						builder.CreateStore(number, var_map[r3]);
 					}						
                 }
 				else
@@ -244,12 +248,20 @@ public:
 				if(tt->contents[0]->name.compare("assignment_operator")==0){
 					cout<<r1<<" "<<r2<<" "<<r3<<endl;
 					value = r1;
+					// nop
 				}
 				else{
 					l = string("Temp").append(itoa(r->getTemp()));
 					value = l;
 					cout<< l<<" = "<<r1<<" "<<r2<<" "<<r3<<endl;
 					// a = 1 + 2
+					if (r2 == "+") {
+						// cout << "debug-- + "<< endl;
+						// for( const auto& n : var_map ) {
+						// 	std::cout << "Key:[" << n.first <<"]\n";
+						// }
+						var_map[l] = builder.CreateAdd(var_map[r1], var_map[r3], l);
+					}
 				}
 				         
             }
@@ -323,7 +335,6 @@ public:
 			t = t->next; 
 		}
 		return value;
-			
 	}        
 	  
 
@@ -367,8 +378,9 @@ public:
 				node* tt=t->sub[0];
 				string r1,r2,r3,l;
                 if(tt->sub.size()==0){
-					if(tt->contents[0]->name.compare("IDENTIFIER")==0)
+					if(tt->contents[0]->name.compare("IDENTIFIER")==0){
 						r1 = string("var").append(itoa(r.getVar(tt->contents[0]->content)));
+					}
 					else if(tt->contents[0]->name.compare("CONSTANT")==0){
 						int i = r.getTemp();
 						cout<<"Temp"<<itoa(i)<<" = "<<"#"<<tt->contents[0]->content<<endl;
@@ -381,12 +393,17 @@ public:
 		
 				tt=t->sub[2];
 				if(tt->sub.size()==0){
-					if(tt->contents[0]->name.compare("IDENTIFIER")==0)
+					if(tt->contents[0]->name.compare("IDENTIFIER")==0) {
 						r3 = string("var").append(itoa(r.getVar(tt->contents[0]->content)));
+					}
 					else if(tt->contents[0]->name.compare("CONSTANT")==0){
 						int i = r.getTemp();
 						cout<<"Temp"<<itoa(i)<<" = "<<"#"<<tt->contents[0]->content<<endl;
 						r3 = string("Temp").append(itoa(i));
+						// int for now
+						auto number = ConstantInt::get(Type::getInt32Ty(context), stoi(tt->contents[0]->content));
+						var_map[r3] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, r3);
+						builder.CreateStore(number, var_map[r3]);
 					}						
                 }
 				else
@@ -397,6 +414,14 @@ public:
 				if(tt->contents[0]->name.compare("assignment_operator")==0){
 					cout<< r1<<" "<<r2<<" "<<r3<<endl;
 					value = r1;
+					// cout << "debug-- + "<< endl;
+					// for( const auto& n : var_map ) {
+					// 	std::cout << "Key:[" << n.first <<"]\n";
+					// }
+					// 	cout << "----" << endl;
+					var_map[r1] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, r1);
+					builder.CreateStore(var_map[r3], var_map[r1]);
+					// a = b
 				}
 				else{
 					l = string("Temp").append(itoa(r.getTemp()));
