@@ -100,22 +100,6 @@ public:
 			vars[i].state=false;
 	}
 
-	int getARG(){
-		for(int i=0;i<num;i++)//find the recent one
-		{
-			if(vars[i].state==false)
-			{
-				vars[i].state = true;
-				return i;
-			}
-		}
-		return -1;
-	}
-	void releaseARG(){
-		for(int i=0;i<num;i++){
-			ARG[i].state=false;
-		}
-	}
 };
 
 
@@ -316,19 +300,21 @@ public:
 				if(t->sub.size()==2){
 					node* s = t->sub[1];
 					while(s!=nullptr){
-						int i = r.getARG();
 						if(s->type == "primary_expression"){
 							if(s->contents[0]->name == "CONSTANT"){
-								cout << "ARG" << i << " :=  " <<s->contents[0]->content  << endl;
+								int i = r.getTemp();
+								cout << "Temp" << i << " := #" << s->contents[0]->content <<endl;
+								cout << "ARG" << "  " << "Temp" << i  << endl;
+								r.releaseTemp(i);
 							}
 							if(s->contents[0]->name == "IDENTIFIER"){
 								string varname = s->contents[0]->content;
-								cout << "ARG" << i << " :=  Var" << r.getVar(s->contents[0]->content)  << endl;
+								cout << "ARG" << "  Var" << r.getVar(s->contents[0]->content)  << endl;
 							}
 						}
 						else{
 							string res = stratTranslate(s,r);
-							cout << "ARG" << i << " :=  "  << res << endl;
+							cout << "ARG" << " "  << res << endl;
 						}
 						
 						s = s->next;
@@ -336,7 +322,6 @@ public:
 					
 				}
 				cout << "CALL " << t->sub[0]->contents[0]->content << endl;
-				//r.releaseARG();
 			}
 
 			else if(t->type == "return_statement"){
