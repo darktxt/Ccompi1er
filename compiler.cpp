@@ -2099,12 +2099,12 @@ yyreduce:
 
   case 9:
 #line 55 "compiler.y"
-    {(yyval.Node)=new node("function_call",NULL,0);(yyval.Node)->addSub(2,(yyvsp[(1) - (4)].Node),(yyvsp[(3) - (4)].Node));cout << (yyvsp[(3) - (4)].Node)->type<< endl;;}
+    {(yyval.Node)=new node("function_call",NULL,0);(yyval.Node)->addSub(2,(yyvsp[(1) - (4)].Node),(yyvsp[(3) - (4)].Node));;}
     break;
 
   case 16:
 #line 65 "compiler.y"
-    {(yyval.Node)=(yyvsp[(1) - (1)].Node);cout << "fd" << (yyvsp[(1) - (1)].Node)->type<< endl;;}
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
     break;
 
   case 17:
@@ -2677,6 +2677,26 @@ yyreduce:
     {(yyval.Node)=new node("for_statement_dcl3", NULL, 0); (yyval.Node)->addSub(4,(yyvsp[(3) - (7)].Node),(yyvsp[(4) - (7)].Node),(yyvsp[(5) - (7)].Node),(yyvsp[(7) - (7)].Node));;}
     break;
 
+  case 227:
+#line 461 "compiler.y"
+    {(yyval.Node)=new node("continue",NULL,1,(yyvsp[(1) - (2)].Element));;}
+    break;
+
+  case 228:
+#line 462 "compiler.y"
+    {(yyval.Node)=new node("break",NULL,1,(yyvsp[(1) - (2)].Element));;}
+    break;
+
+  case 229:
+#line 463 "compiler.y"
+    {(yyval.Node)=new node("return_statement",NULL,1,(yyvsp[(1) - (2)].Element));;}
+    break;
+
+  case 230:
+#line 464 "compiler.y"
+    {(yyval.Node)=new node("return_statement",NULL,1,(yyvsp[(1) - (3)].Element)); (yyval.Node)->addSub(1,(yyvsp[(2) - (3)].Node));;}
+    break;
+
   case 231:
 #line 468 "compiler.y"
     {root=(yyvsp[(1) - (1)].Node);;}
@@ -2709,7 +2729,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2713 "compiler.cpp"
+#line 2733 "compiler.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

@@ -1,0 +1,23 @@
+FUNCTION test :
+Temp0 = #2
+RETURN Temp0
+FUNCTION main :
+Temp0 = CALL read
+var2 = Temp0
+Temp0 = #0
+var0 = Temp0
+LABEL label_0 :
+Temp0 = var0 < var2
+IF Temp0 != 0 GOTO label_1
+GOTO label_2
+LABEL label_1 :
+Temp0 = CALL test
+Temp0 = var1 + Temp0
+var1 = Temp0
+Temp0 = #1
+Temp1 = var0 + Temp0
+var0 = Temp1
+GOTO label_0
+LABEL label_2 :
+ARG var1
+CALL print

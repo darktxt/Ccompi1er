@@ -24,12 +24,12 @@ void yyerror(char const *s);
 
 "auto"			{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","auto");return(AUTO); }
 "_Bool"			{ count(); yylval.Element = new element(yylineno,"type_specifier","_Bool");return(BOOL); }
-"break"			{ count(); return(BREAK); }
+"break"			{ count(); yylval.Element = new element(yylineno,"reserved_keywords","break");return(BREAK); }
 "case"			{ count(); return(CASE); }
 "char"			{ count(); yylval.Element = new element(yylineno,"type_specifier","char"); return(CHAR); }
 "_Complex"		{ count(); /*I abandon this. @txt*/return(COMPLEX); }
 "const"			{ count(); yylval.Element = new element(yylineno,"type_qualifier","const");return(CONST); }
-"continue"		{ count(); return(CONTINUE); }
+"continue"		{ count(); yylval.Element = new element(yylineno,"reserved_keywords","continue");return(CONTINUE); }
 "default"		{ count(); return(DEFAULT); }
 "do"			{ count(); yylval.Element = new element(yylineno, "iteration_specifier", "do"); return(DO); }
 "double"		{ count(); yylval.Element = new element(yylineno,"type_specifier","double"); return(DOUBLE); }
@@ -46,7 +46,7 @@ void yyerror(char const *s);
 "long"			{ count(); yylval.Element = new element(yylineno,"type_specifier","long"); return(LONG); }
 "register"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","register");return(REGISTER); }
 "restrict"		{ count(); yylval.Element = new element(yylineno,"type_qualifier","restrict");return(RESTRICT); }
-"return"		{ count(); return(RETURN); }
+"return"		{ count(); yylval.Element = new element(yylineno,"reserved_keywords","return");return(RETURN); }
 "short"			{ count(); yylval.Element = new element(yylineno,"type_specifier","short"); return(SHORT); }
 "signed"		{ count(); yylval.Element = new element(yylineno,"type_specifier","signed");return(SIGNED); }
 "sizeof"		{ count(); return(SIZEOF); }

@@ -1022,7 +1022,7 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 27 "compiler.l"
-{ count(); return(BREAK); }
+{ count(); yylval.Element = new element(yylineno,"reserved_keywords","break");return(BREAK); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
@@ -1047,7 +1047,7 @@ YY_RULE_SETUP
 case 10:
 YY_RULE_SETUP
 #line 32 "compiler.l"
-{ count(); return(CONTINUE); }
+{ count(); yylval.Element = new element(yylineno,"reserved_keywords","continue");return(CONTINUE); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
@@ -1132,7 +1132,7 @@ YY_RULE_SETUP
 case 27:
 YY_RULE_SETUP
 #line 49 "compiler.l"
-{ count(); return(RETURN); }
+{ count(); yylval.Element = new element(yylineno,"reserved_keywords","return");return(RETURN); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP

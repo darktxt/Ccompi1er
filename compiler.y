@@ -52,7 +52,7 @@ postfix_expression
 	: primary_expression						{$$=$1;}
 	| postfix_expression '[' expression ']'				{node* t=$1;while(t->next)t=t->next;t->next=$3;}
 	| postfix_expression '(' ')'					{$$=new node("function_call",NULL,0);$$->addSub(1,$1);}
-	| postfix_expression '(' argument_expression_list ')'		{$$=new node("function_call",NULL,0);$$->addSub(2,$1,$3);cout << $3->type<< endl;}
+	| postfix_expression '(' argument_expression_list ')'		{$$=new node("function_call",NULL,0);$$->addSub(2,$1,$3);}
 	| postfix_expression '.' IDENTIFIER				//abandoned
 	| postfix_expression PTR_OP IDENTIFIER				//abandoned
 	| postfix_expression INC_OP					//wait to be updated
@@ -62,7 +62,7 @@ postfix_expression
 	;
 
 argument_expression_list
-	: assignment_expression						{$$=$1;cout << "fd" << $1->type<< endl;}
+	: assignment_expression						{$$=$1;}
 	| argument_expression_list ',' assignment_expression		{node* t=$1;while(t->next)t=t->next;t->next=$3;}
 	;
 
@@ -458,10 +458,10 @@ iteration_statement
 
 jump_statement
 	: GOTO IDENTIFIER ';'										//no use
-	| CONTINUE ';'
-	| BREAK ';'
-	| RETURN ';'
-	| RETURN expression ';'
+	| CONTINUE ';'											{$$=new node("continue",NULL,1,$1);}
+	| BREAK ';'												{$$=new node("break",NULL,1,$1);}
+	| RETURN ';'											{$$=new node("return_statement",NULL,1,$1);}
+	| RETURN expression ';'									{$$=new node("return_statement",NULL,1,$1); $$->addSub(1,$2);}
 	;
 start
 	:
