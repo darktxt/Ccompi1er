@@ -1,17 +1,13 @@
-
 float test()
 {
-	int a;
-	int i;
-	for(;i>2;i=3){
-		i=2;
-	}
-	a=（3+4)*5;
+	int b=1;
+	b += 2;
 }
 
 
-void main(int x,int y)
+void main()
 {
-	int a;
-	a=20;
+	int c;
+	c = 3+4;
+	test(1,c,c+1*4*c);
 }

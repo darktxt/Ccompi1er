@@ -51,8 +51,8 @@ primary_expression
 postfix_expression
 	: primary_expression						{$$=$1;}
 	| postfix_expression '[' expression ']'				{node* t=$1;while(t->next)t=t->next;t->next=$3;}
-	| postfix_expression '(' ')'					//abandoned
-	| postfix_expression '(' argument_expression_list ')'		{node* t=$1;while(t->next)t=t->next;t->next=$3;}
+	| postfix_expression '(' ')'					{$$=new node("function_call",NULL,0);$$->addSub(1,$1);}
+	| postfix_expression '(' argument_expression_list ')'		{$$=new node("function_call",NULL,0);$$->addSub(2,$1,$3);cout << $3->type<< endl;}
 	| postfix_expression '.' IDENTIFIER				//abandoned
 	| postfix_expression PTR_OP IDENTIFIER				//abandoned
 	| postfix_expression INC_OP					//wait to be updated
@@ -62,7 +62,7 @@ postfix_expression
 	;
 
 argument_expression_list
-	: assignment_expression						{$$=$1;}
+	: assignment_expression						{$$=$1;cout << "fd" << $1->type<< endl;}
 	| argument_expression_list ',' assignment_expression		{node* t=$1;while(t->next)t=t->next;t->next=$3;}
 	;
 
@@ -148,7 +148,7 @@ logical_or_expression
 	;
 
 conditional_expression
-	: logical_or_expression							{$$=$1;$$->reName("conditional_expression1");}
+	: logical_or_expression							{$$=$1;}
 	| logical_or_expression '?' expression ':' conditional_expression	{$$=new node("conditional_expression2",NULL,0); $$->addSub(3,$1,$3,$5);}
 	;
 
@@ -437,7 +437,7 @@ block_item
 	;
 
 expression_statement
-	: ';'
+	: ';'			{$$=new node("null", NULL, 0);}
 	| expression ';'	{$$=$1;}
 	;
 

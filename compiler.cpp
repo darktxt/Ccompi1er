@@ -2092,14 +2092,19 @@ yyreduce:
     {node* t=(yyvsp[(1) - (4)].Node);while(t->next)t=t->next;t->next=(yyvsp[(3) - (4)].Node);;}
     break;
 
+  case 8:
+#line 54 "compiler.y"
+    {(yyval.Node)=new node("function_call",NULL,0);(yyval.Node)->addSub(1,(yyvsp[(1) - (3)].Node));;}
+    break;
+
   case 9:
 #line 55 "compiler.y"
-    {node* t=(yyvsp[(1) - (4)].Node);while(t->next)t=t->next;t->next=(yyvsp[(3) - (4)].Node);;}
+    {(yyval.Node)=new node("function_call",NULL,0);(yyval.Node)->addSub(2,(yyvsp[(1) - (4)].Node),(yyvsp[(3) - (4)].Node));cout << (yyvsp[(3) - (4)].Node)->type<< endl;;}
     break;
 
   case 16:
 #line 65 "compiler.y"
-    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);cout << "fd" << (yyvsp[(1) - (1)].Node)->type<< endl;;}
     break;
 
   case 17:
@@ -2289,7 +2294,7 @@ yyreduce:
 
   case 60:
 #line 151 "compiler.y"
-    {(yyval.Node)=(yyvsp[(1) - (1)].Node);(yyval.Node)->reName("conditional_expression1");;}
+    {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
     break;
 
   case 61:
@@ -2617,6 +2622,11 @@ yyreduce:
     {(yyval.Node)=(yyvsp[(1) - (1)].Node);;}
     break;
 
+  case 215:
+#line 440 "compiler.y"
+    {(yyval.Node)=new node("null", NULL, 0);;}
+    break;
+
   case 216:
 #line 441 "compiler.y"
     {(yyval.Node)=(yyvsp[(1) - (2)].Node);;}
@@ -2699,7 +2709,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2703 "compiler.cpp"
+#line 2713 "compiler.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
