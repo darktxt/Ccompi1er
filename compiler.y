@@ -458,8 +458,8 @@ iteration_statement
 
 jump_statement
 	: GOTO IDENTIFIER ';'										//no use
-	| CONTINUE ';'
-	| BREAK ';'
+	| CONTINUE ';'											{$$=new node("continue",NULL,1,$1);}
+	| BREAK ';'												{$$=new node("break",NULL,1,$1);}
 	| RETURN ';'											{$$=new node("return_statement",NULL,1,$1);}
 	| RETURN expression ';'									{$$=new node("return_statement",NULL,1,$1); $$->addSub(1,$2);}
 	;

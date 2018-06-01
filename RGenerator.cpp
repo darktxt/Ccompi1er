@@ -108,6 +108,9 @@ class RGenerator{
 	bool *labels;
 	const int MAX_LABELS = 1000;
 	Data r = Data(32);
+	bool isloop;
+	int startlabel;
+	int endlabel;
 public:
     RGenerator(node* root){
         this->root = root;
@@ -256,11 +259,22 @@ public:
 				cout << "LABEL label_" << label_next <<":" << endl;
 			}
 
+			else if(t->type == "break"){
+				cout << "GOTO label_" << this->endlabel << endl;
+			}
+
+			else if(t->type == "continue"){
+				cout << "GOTO label_" << this->startlabel << endl;
+			}
 
 			else if(t->type == "while_statement"){
 				int label_while = getLabel();
 				int label_start = getLabel();
 				int label_end = getLabel();
+				isloop = true;
+				startlabel = label_while;
+				endlabel = label_end;
+
 				cout << "LABEL label_" << label_while <<":" << endl;
 				string resReg = stratTranslate(t->sub[0],r);
 				cout << "IF " << resReg << " == 0 GOTO label_" << label_start << endl;
@@ -272,27 +286,32 @@ public:
 			}
 
 			else if(t->type == "do_while_statement"){
-				int label_while = getLabel();
-				cout << "LABEL label_" << label_while <<":" << endl;
+				int beginlabel = getLabel();
+				startlabel = getLabel();
+				endlabel = getLabel();
+				cout << "LABEL label_" << beginlabel <<":" << endl;
 				stratTranslate(t->sub[0],r);
+				cout << "LABEL label_" << startlabel <<":" << endl;
 				string resReg = stratTranslate(t->sub[1],r);
-				cout << "IF " << resReg << " == 0 GOTO label_" << label_while << endl;
+				cout << "IF " << resReg << " == 0 GOTO label_" << beginlabel << endl;
+				cout << "LABEL label_" << endlabel <<":" << endl;
+
 			}
 
 			else if(t->type == "for_statement_exp3"){
-				int label_for = getLabel();
+				startlabel = getLabel();
 				int label_start = getLabel();
-				int label_end = getLabel();
+				endlabel = getLabel();
 				stratTranslate(t->sub[0],r);
-				cout << "LABEL label_" << label_for <<":" << endl;
+				cout << "LABEL label_" << startlabel <<":" << endl;
 				string resReg = stratTranslate(t->sub[1],r);
 				cout << "IF " << resReg << " == 0 GOTO label_" << label_start << endl;
-				cout << "GOTO label_" << label_end << endl;
+				cout << "GOTO label_" << endlabel << endl;
 				cout << "LABEL label_" << label_start <<":" << endl;
 				stratTranslate(t->sub[3],r);
 				stratTranslate(t->sub[2],r);
-				cout << "GOTO label_" << label_for << endl;
-				cout << "LABEL label_" << label_end <<":" << endl;
+				cout << "GOTO label_" << startlabel << endl;
+				cout << "LABEL label_" << endlabel <<":" << endl;
 			}
 
 			else if(t->type == "function_call"){
@@ -345,6 +364,7 @@ public:
 					cout << "RETURN " << res << endl;
 				}
 			}
+			
 
 			t = t->next; 
 		}
