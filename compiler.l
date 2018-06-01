@@ -46,7 +46,7 @@ void yyerror(char const *s);
 "long"			{ count(); yylval.Element = new element(yylineno,"type_specifier","long"); return(LONG); }
 "register"		{ count(); yylval.Element = new element(yylineno,"storage_class_specifier","register");return(REGISTER); }
 "restrict"		{ count(); yylval.Element = new element(yylineno,"type_qualifier","restrict");return(RESTRICT); }
-"return"		{ count(); return(RETURN); }
+"return"		{ count(); yylval.Element = new element(yylineno,"reserved_keywords","return");return(RETURN); }
 "short"			{ count(); yylval.Element = new element(yylineno,"type_specifier","short"); return(SHORT); }
 "signed"		{ count(); yylval.Element = new element(yylineno,"type_specifier","signed");return(SIGNED); }
 "sizeof"		{ count(); return(SIZEOF); }

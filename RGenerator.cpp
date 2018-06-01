@@ -113,7 +113,7 @@ public:
 	}
 	void releaseARG(){
 		for(int i=0;i<num;i++){
-			vars[i].state=false;
+			ARG[i].state=false;
 		}
 	}
 };
@@ -435,7 +435,6 @@ public:
 				// have parameter
 				if(t->sub.size()==2){
 					node* s = t->sub[1];
-					
 					while(s!=nullptr){
 						int i = r.getARG();
 						if(s->type == "primary_expression"){
@@ -458,6 +457,28 @@ public:
 				}
 				cout << "CALL " << t->sub[0]->contents[0]->content << endl;
 				r.releaseARG();
+			}
+
+			else if(t->type == "return_statement"){
+				if(t->sub.size()==0){
+					cout << "RETURN" << endl;
+				}
+				else{
+					node* s = t->sub[0];
+					string res;
+					if(s->type == "primary_expression"){
+						if(s->contents[0]->name == "CONSTANT"){
+							res = s->contents[0]->content;
+						}
+						if(s->contents[0]->name == "IDENTIFIER"){
+							res = s->contents[0]->content;
+						}
+					}
+					else{
+						res = stratTranslate(s,r);
+					}
+					cout << "RETURN " << res << endl;
+				}
 			}
 
 			t = t->next; 

@@ -1132,7 +1132,7 @@ YY_RULE_SETUP
 case 27:
 YY_RULE_SETUP
 #line 49 "compiler.l"
-{ count(); return(RETURN); }
+{ count(); yylval.Element = new element(yylineno,"reserved_keywords","return");return(RETURN); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
