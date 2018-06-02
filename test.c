@@ -1,24 +1,16 @@
+int test(int x, int y){
+	x = 1;
+}
+
+int test2(){
+	int z;
+	z=1;
+}
 
 void main()
 {
-	int c;
-	int t;
-	int d;
-	d = read();
-	int a0 = 1;
-	int a1 = 1;
-	for(c=0;c<d;c=c+1){
-		if(c == 0){
-			print(1);
-			continue;
-		}
-		if(c == 1){
-			print(1);
-			continue;
-		}
-		t = a0+a1;
-		a0 = a1;
-		a1 = t;
-		print(a1);
-	}
+	int a=1;
+	int b=2;
+	int d =3;
+	int c = 1+a*b/c + a*(b+d);
 }

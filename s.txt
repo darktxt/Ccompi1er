@@ -1,0 +1,24 @@
+
+void main()
+{
+	int a=1;
+	int b=1;
+	int c = 1+a*b/c + a*b/c;
+}
+
+
+
+中间树
+FUNCTION main :
+Temp0 = #1
+var0 = Temp0
+Temp0 = #1
+var1 = Temp0
+Temp0 = #1
+Temp1 = var0 * var1
+Temp1 = Temp1 / var2
+Temp1 = Temp0 + Temp1
+Temp0 = var0 * var1
+Temp0 = Temp0 / var2
+Temp0 = Temp1 + Temp0
+var2 = Temp0

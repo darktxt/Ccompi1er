@@ -104,6 +104,42 @@ public:
 
 };
 
+struct para{
+	string paratype;
+	string paraname;
+};
+
+
+struct funcrecord{
+	string functype;
+	string funcname;
+	vector<para> funcpara; 
+	int getParaNum(){
+		return funcpara.size();
+	}
+};
+
+
+class Function{
+public:
+	vector<funcrecord> Record;	
+	int size = 0;
+	void addfunc(struct funcrecord record){
+		Record.push_back(record);
+		size++;
+	}
+
+	void printAllFunc(){
+		cout << "--------------函数表----------------" << endl;
+		for(int i=0;i<size;i++){
+			cout << Record[i].functype << "  " << Record[i].funcname << "  ";
+			for(int j=0;j<Record[i].getParaNum();j++){
+				cout << Record[i].funcpara[j].paratype << "  " << Record[i].funcpara[j].paraname << "  " ;
+			}
+			cout << endl;
+		}
+	}
+};
 
 class RGenerator{
     node* root;
@@ -114,6 +150,7 @@ class RGenerator{
 	int startlabel;
 	int endlabel;
 	bool func_call_visual = true;
+	Function FunctionRecord;
 public:
     RGenerator(node* root){
         this->root = root;
@@ -123,6 +160,8 @@ public:
 			labels[i]=false;
 		}
         stratTranslate(this->root,r);
+		cout << endl << endl << endl;
+		FunctionRecord.printAllFunc();
     }
 
 	~RGenerator(){
@@ -150,25 +189,38 @@ public:
 	}      
 	  
 
-    string stratTranslate(node* root,Data r) {
+    string stratTranslate(node* root,Data &r) {
 		node* t = root;
 		string value="";
 		while (t) {
 			
             if(t->type.compare("function_definition")==0){
                 cout << "FUNCTION " << t->contents[1]->content << " :" << endl;
-				if(t->contents[1]->content.find("main")!= -1){
-                	//cout << t->sub[0]->type<<endl;
-					//cout << t->sub[0]->contents[0]->content<<endl;
-					//cout << t->sub.size()<<endl;
-					loop(t,r);
+				struct funcrecord f;
+				f.functype = t->contents[0]->content;
+				f.funcname = t->contents[1]->content;
+				if(t->sub.size()>1){
+					node* psub = t->sub[0];
+					while(psub){
+						struct para p;
+						p.paratype = psub->contents[0]->content;
+						p.paraname = psub->contents[1]->content;
+						//cout << "-----" << p.paratype  << "----" << p.paraname << endl;
+						f.funcpara.push_back(p);
+						if(psub->next){
+							psub = psub->next;
+						}
+						else{
+							break;
+						}
+					}
 				}
-				else{
-					loop(t,r);
-				}
+				FunctionRecord.addfunc(f);
+				loop(t,r);
             }
 
             else if(t->type.compare("parameter_declaration")==0){
+				// cout << "PARAM " <<  t->contents[0]->content << endl;
                 cout << "PARAM " <<  t->contents[1]->content << endl;
                 loop(t,r);
             }
@@ -358,6 +410,8 @@ public:
 					for(int j=ARG.size()-1;j>=0;j--){
 						cout << "ARG" << " "  << ARG[j] << endl;
 					}
+
+
 				}
 				if(func_call_visual == true)
 					cout << "CALL " << t->sub[0]->contents[0]->content << endl;

@@ -137,11 +137,14 @@ def parser():
     Load_Var(Inter)    #第一遍扫描，记录所有变量
     Obj=[]
 
+
     for i in range(len(Inter)):
         line = Inter[i]
         if line[0] == "中间树":
-            Inter = Inter[i+1:]
-            break
+            start = i+1
+        if "函数表" in line[0]:
+            end = i
+    Inter = Inter[start:end]
 
     num = -1
     # for line in Inter[:num]:
