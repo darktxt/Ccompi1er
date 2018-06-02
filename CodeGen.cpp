@@ -176,7 +176,15 @@ public:
     }
 
     void eraseTempVar(std::string key) {
-        temp_var.erase(key);
+        auto search = temp_var.find(key);
+        if (search != temp_var.end()) {
+            temp_var.erase(key);
+        }
+        else {
+            if (key.find("Temp") != std::string::npos) {
+                var_map.erase(key);
+            }
+        }
     }
 
 };
