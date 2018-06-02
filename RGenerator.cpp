@@ -238,6 +238,7 @@ public:
 					cout<< r1<<" "<<r2<<" "<<r3<<endl;
 					value = r1;
 					cg.createAssignVar(r1, r3);
+					cg.eraseTempVar(r3);
 					// a = b
 				}
 				else{
@@ -245,6 +246,8 @@ public:
 					value = l;
 					cout<< l<<" = "<<r1<<" "<<r2<<" "<<r3<<endl;
 					cg.createBinOp(l, r1, r2, r3);
+					cg.eraseTempVar(r1);
+					cg.eraseTempVar(r3);
 				}
 				         
             }
