@@ -144,7 +144,7 @@ def parser():
             start = i+1
         if "函数表" in line[0]:
             end = i
-    Inter = Inter[start:end]
+    Inter = Inter[start:end+1]
 
     num = -1
     # for line in Inter[:num]:

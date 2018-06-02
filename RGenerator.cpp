@@ -222,6 +222,8 @@ public:
             else if(t->type.compare("parameter_declaration")==0){
 				// cout << "PARAM " <<  t->contents[0]->content << endl;
                 cout << "PARAM " <<  t->contents[1]->content << endl;
+				
+				r.setVar(t->contents[1]->content,t->contents[0]->content);
                 loop(t,r);
             }
             else if (t->type.compare("declaration")==0){
@@ -435,8 +437,8 @@ public:
 							res = res + to_string(i);
 						}
 						if(s->contents[0]->name == "IDENTIFIER"){
-							res = "var ";
-							res += r.getVar(s->contents[0]->content);
+							res = "var";
+							res += to_string(r.getVar(s->contents[0]->content));
 						}
 					}
 					else{

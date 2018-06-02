@@ -1,16 +1,13 @@
-int test(int x, int y){
-	x = 1;
+int fact(int x){
+	int s = 2*x + 1;
+	return s;
 }
 
-int test2(){
-	int z;
-	z=1;
-}
 
 void main()
 {
-	int a=1;
-	int b=2;
-	int d =3;
-	int c = 1+a*b/c + a*(b+d);
+	int a;
+	a = read();
+	a = fact(a);
+	print(a);
 }

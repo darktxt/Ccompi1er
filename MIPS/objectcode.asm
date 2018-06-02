@@ -19,24 +19,45 @@ print:
     syscall
     move $v0,$0
     jr $ra
-test:
-	li $t1,1
-	move $t2,$t1
-test2:
-	li $t1,1
-	move $t3,$t1
-main:
-	li $t1,1
-	move $t3,$t1
+fact:
 	li $t1,2
-	move $t4,$t1
-	li $t1,3
-	move $t5,$t1
+	mul $t2,$t1,$t3
 	li $t1,1
-	mul $t6,$t3,$t4
-	div $t6,$t7
-	mflo $t6
-	add $t6,$t1,$t6
-	add $t1,$t4,$t5
-	mul $t1,$t3,$t1
-	add $t1,$t6,$t1
+	add $t2,$t2,$t1
+	move $t4,$t2
+	move $v0,$t4
+	jr $ra
+main:
+	addi $sp,$sp,-4
+	sw $ra,0($sp)
+	jal read
+	lw $ra,0($sp)
+	move $t1,$v0
+	addi $sp,$sp,4
+	move $t3,$t1
+	move $t0,$a0
+	move $a0,$t3
+	addi $sp,$sp,-24
+	sw $t0,0($sp)
+	sw $ra,4($sp)
+	sw $t1,8($sp)
+	sw $t2,12($sp)
+	sw $t3,16($sp)
+	sw $t4,20($sp)
+	jal fact
+	lw $a0,0($sp)
+	lw $ra,4($sp)
+	lw $t1,8($sp)
+	lw $t2,12($sp)
+	lw $t3,16($sp)
+	lw $t4,20($sp)
+	addi $sp,$sp,24
+	move $t1 $v0
+	move $t3,$t1
+	move $t0,$a0
+	move $a0,$t3
+	addi $sp,$sp,-4
+	sw $ra,0($sp)
+	jal print
+	lw $ra,0($sp)
+	addi $sp,$sp,4

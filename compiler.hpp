@@ -174,7 +174,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 13 "compiler.y"
+#line 15 "compiler.y"
 {
 	class node* Node;
 	class element* Element;
