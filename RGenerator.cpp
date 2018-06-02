@@ -281,11 +281,16 @@ public:
 					value = l;
 					cout<< l<<" = "<<r1<<" "<<r2<<" "<<r3<<endl;
 					if (r2 == "+") {
-						// cout << "debug-- + "<< endl;
-						// for( const auto& n : var_map ) {
-						// 	std::cout << "Key:[" << n.first <<"]\n";
-						// }
 						var_map[l] = builder.CreateAdd(var_map[r1], var_map[r3], l);
+					}
+					else if (r2 == "-") {
+						var_map[l] = builder.CreateSub(var_map[r1], var_map[r3], l);
+					}
+					else if (r2 == "*") {
+						var_map[l] = builder.CreateMul(var_map[r1], var_map[r3], l);
+					}
+					else if (r2 == "/") {
+						var_map[l] = builder.CreateSDiv(var_map[r1], var_map[r3], l);
 					}
 				}
 				         
