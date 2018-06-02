@@ -129,6 +129,7 @@ public:
         stratTranslate(this->root,r);
 		printf("end\n");
 		module->print(errs(), nullptr);
+		cg.generateObjectCode();
     }
 
 	~RGenerator(){
@@ -337,9 +338,9 @@ public:
 
 			else if(t->type == "function_call"){
 				// have parameter
+				vector<string> ARG;
 				if(t->sub.size()==2){
 					node* s = t->sub[1];
-					vector<string> ARG;
 					vector<int> TEMP;
 					while(s!=nullptr){
 						if(s->type == "primary_expression"){
@@ -351,6 +352,7 @@ public:
 								argname += to_string(i);
 								ARG.push_back(argname);
 								TEMP.push_back(i);
+								cg.createTempVar(stoi(s->contents[0]->content), argname);
 							}
 							if(s->contents[0]->name == "IDENTIFIER"){
 								string varname = s->contents[0]->content;
@@ -373,6 +375,7 @@ public:
 				}
 				if(func_call_visual == true) {
 					cout << "CALL " << t->sub[0]->contents[0]->content << endl;
+					cg.callFunction(t->sub[0]->contents[0]->content, ARG);
 				}
 				else{
 					func_call_visual = true;

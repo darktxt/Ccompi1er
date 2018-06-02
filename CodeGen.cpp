@@ -14,6 +14,8 @@
 #include "llvm/Target/TargetOptions.h"
 #include <unordered_map>
 #include <string>
+#include <vector>
+#include <iostream>
 
 using namespace llvm;
 // llvm part
@@ -43,7 +45,28 @@ public:
         builder.SetInsertPoint(entry);
     }
 
-    void callFunction(std::string name, std::vector)
+    void callFunction(std::string name, const std::vector<std::string>& args) {
+        if (name == "print") {
+            callPrintFunction(args);
+        }
+    }
+
+    void callPrintFunction(const std::vector<std::string>& args) {
+        std::vector<Type *> argsType;
+        std::vector<Value *> argsValue;
+        auto formatString = builder.CreateGlobalStringPtr("%d\n");
+        argsValue.push_back(formatString);
+        argsType.push_back(formatString->getType());
+        for (auto arg: args) {
+            auto value = var_map[arg];
+            argsValue.push_back(value);
+            argsType.push_back(value->getType());
+        }
+        ArrayRef<Type *> argsRef(argsType);
+        auto printfType = FunctionType::get(builder.getInt32Ty(), argsRef, false);
+        auto printfFunc = module->getOrInsertFunction("printf", printfType);
+        builder.CreateCall(printfFunc, argsValue);
+    }
 
     void createRet(std::string retName) {
         if (retName == "void")
@@ -57,8 +80,7 @@ public:
     }
 
     void createAssignVar(std::string leftName, std::string rightName) {
-        var_map[leftName] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, leftName);
-        builder.CreateStore(var_map[rightName], var_map[leftName]);
+        var_map[leftName] = builder.CreateLoad(var_map[rightName], leftName);
     }
 
     void createBinOp(std::string leftName, std::string r1, std::string r2, std::string r3) {
@@ -76,4 +98,61 @@ public:
         }
         // ----todo----
     }
+
+    int generateObjectCode() {
+        // Initialize the target registry etc.
+        InitializeAllTargetInfos();
+        InitializeAllTargets();
+        InitializeAllTargetMCs();
+        InitializeAllAsmParsers();
+        InitializeAllAsmPrinters();
+
+        auto TargetTriple = sys::getDefaultTargetTriple();
+        module->setTargetTriple(TargetTriple);
+
+        std::string Error;
+        auto Target = TargetRegistry::lookupTarget(TargetTriple, Error);
+
+        // Print an error and exit if we couldn't find the requested target.
+        // This generally occurs if we've forgotten to initialise the
+        // TargetRegistry or we have a bogus target triple.
+        if (!Target) {
+            errs() << Error;
+            return 1;
+        }
+
+        auto CPU = "generic";
+        auto Features = "";
+
+        TargetOptions opt;
+        auto RM = Optional<Reloc::Model>();
+        auto TheTargetMachine =
+            Target->createTargetMachine(TargetTriple, CPU, Features, opt, RM);
+
+        module->setDataLayout(TheTargetMachine->createDataLayout());
+
+        auto Filename = "output.o";
+        std::error_code EC;
+        raw_fd_ostream dest(Filename, EC, sys::fs::F_None);
+
+        if (EC) {
+            errs() << "Could not open file: " << EC.message();
+            return 1;
+        }
+
+        legacy::PassManager pass;
+        auto FileType = TargetMachine::CGFT_ObjectFile;
+
+        if (TheTargetMachine->addPassesToEmitFile(pass, dest, FileType)) {
+            errs() << "TheTargetMachine can't emit a file of this type";
+            return 1;
+        }
+
+        pass.run(*module);
+        dest.flush();
+
+        outs() << "Wrote " << Filename << "\n";
+        return 0;
+    }
+
 };
