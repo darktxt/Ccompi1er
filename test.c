@@ -1,5 +1,7 @@
 void main()
 {
-	int a = 0;
-	int b = a + 1;
+	int a = 5;
+	int b = 1 + a;
+	int c = a / b;
+	print(a);
 }

@@ -315,18 +315,23 @@ public:
 			}
 
 			else if(t->type == "for_statement_exp3"){
-				startlabel = getLabel();
+				int label_judge = getLabel();
 				int label_start = getLabel();
+				
+				
+				startlabel = getLabel();
 				endlabel = getLabel();
+
 				stratTranslate(t->sub[0],r);
-				cout << "LABEL label_" << startlabel <<" :" << endl;
+				cout << "LABEL label_" << label_judge <<" :" << endl;
 				string resReg = stratTranslate(t->sub[1],r);
 				cout << "IF " << resReg << " != 0 GOTO label_" << label_start << endl;
 				cout << "GOTO label_" << endlabel << endl;
 				cout << "LABEL label_" << label_start <<" :" << endl;
 				stratTranslate(t->sub[3],r);
+				cout << "LABEL label_" << startlabel <<" :" << endl;
 				stratTranslate(t->sub[2],r);
-				cout << "GOTO label_" << startlabel << endl;
+				cout << "GOTO label_" << label_judge << endl;
 				cout << "LABEL label_" << endlabel <<" :" << endl;
 			}
 
@@ -335,6 +340,7 @@ public:
 				if(t->sub.size()==2){
 					node* s = t->sub[1];
 					vector<string> ARG;
+					vector<int> TEMP;
 					while(s!=nullptr){
 						if(s->type == "primary_expression"){
 							if(s->contents[0]->name == "CONSTANT"){
@@ -344,7 +350,7 @@ public:
 								string argname = "Temp";
 								argname += to_string(i);
 								ARG.push_back(argname);
-								r.releaseTemp(i);
+								TEMP.push_back(i);
 							}
 							if(s->contents[0]->name == "IDENTIFIER"){
 								string varname = s->contents[0]->content;
@@ -356,15 +362,14 @@ public:
 						}
 						else{
 							string res = stratTranslate(s,r);
-							//cout << "ARG" << " "  << res << endl;
 							ARG.push_back(res);
 						}
-						for(int j=ARG.size()-1;j>=0;j--){
-							cout << "ARG" << " "  << ARG[j] << endl;
-						}
+
 						s = s->next;
 					}
-					
+					for(int j=ARG.size()-1;j>=0;j--){
+						cout << "ARG" << " "  << ARG[j] << endl;
+					}
 				}
 				if(func_call_visual == true) {
 					cout << "CALL " << t->sub[0]->contents[0]->content << endl;

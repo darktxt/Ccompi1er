@@ -1,0 +1,74 @@
+
+void main()
+{
+	int c;
+	int t;
+	int d;
+	d = read();
+	int a0 = 1;
+	int a1 = 1;
+	for(c=0;c<d;c=c+1){
+		if(c == 0){
+			print(1);
+			continue;
+		}
+		if(c == 1){
+			print(1);
+			continue;
+		}
+		t = a0+a1;
+		a0 = a1;
+		a1 = t;
+		print(a1);
+	}
+}
+
+
+
+中间树
+FUNCTION main :
+Temp0 = CALL read
+var2 = Temp0
+Temp0 = #1
+var3 = Temp0
+Temp0 = #1
+var4 = Temp0
+Temp0 = #0
+var0 = Temp0
+LABEL label_0 :
+Temp0 = var0 < var2
+IF Temp0 != 0 GOTO label_1
+GOTO label_3
+LABEL label_1 :
+Temp0 = #0
+Temp1 = var0 == Temp0
+IF Temp1 == 0 GOTO label_4
+GOTO label_5
+LABEL label_4 :
+Temp0 = #1
+ARG Temp0
+CALL print
+GOTO label_2
+LABEL label_5 :
+Temp0 = #1
+Temp1 = var0 == Temp0
+IF Temp1 == 0 GOTO label_6
+GOTO label_7
+LABEL label_6 :
+Temp0 = #1
+ARG Temp0
+CALL print
+GOTO label_2
+LABEL label_7 :
+Temp0 = var3 + var4
+var1 = Temp0
+var3 = var4
+var4 = var1
+ARG var4
+CALL print
+LABEL label_2 :
+Temp0 = #1
+Temp1 = var0 + Temp0
+var0 = Temp1
+GOTO label_0
+LABEL label_3 :

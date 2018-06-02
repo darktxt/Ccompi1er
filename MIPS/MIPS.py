@@ -71,6 +71,9 @@ def translate(line):
                 return '\tslt %s,%s,%s'%(Get_R(line[0]),Get_R(line[2]),Get_R(line[-1]))
             elif line[3]=='>':
                 return '\tslt %s,%s,%s'%(Get_R(line[0]),Get_R(line[-1]),Get_R(line[2]))
+            elif line[3]=='==':
+                return '\tsub %s,%s,%s'%(Get_R(line[0]),Get_R(line[-1]),Get_R(line[2]))
+
         if line[2]=='CALL':
             if line[3]=='read' or line[3]=='print':
                 return '\taddi $sp,$sp,-4\n\tsw $ra,0($sp)\n\tjal %s\n\tlw $ra,0($sp)\n\tmove %s,$v0\n\taddi $sp,$sp,4'%(line[-1],Get_R(line[0]))
@@ -83,6 +86,8 @@ def translate(line):
     if line[0]=='IF':
         if line[2]=='!=':
             return '\tbne %s,%s,%s'%(Get_R(line[1]),"$zero",line[-1])
+        if line[2] == '==':
+            return '\tbeq %s,%s,%s' % (Get_R(line[1]), "$zero", line[-1])
     if line[0]=='FUNCTION':
         return '%s:'%line[1]
     if line[0]=='CALL':
@@ -97,7 +102,7 @@ def translate(line):
     return ''
 
 def write_to_txt(Obj):
-    f=open('result.asm','w')
+    f=open('./MIPS/objectcode.asm','w')
     template='''
 .data
 _prompt: .asciiz "Enter an integer:"
@@ -128,15 +133,22 @@ print:
 def parser():
     for reg in regs:
         reg_ok[reg]=1  #初始化，所有寄存器都可用
-    Inter=Load_Inter('inter.txt')  #读取中间代码
+    Inter=Load_Inter('./MIPS/intercode.txt')  #读取中间代码
     Load_Var(Inter)    #第一遍扫描，记录所有变量
     Obj=[]
-    num = -1
-    for line in Inter[:num]:
-        obj_line=line #翻译中间代码成MIPS汇编
-        print(obj_line)
 
-    for line in Inter:
+    for i in range(len(Inter)):
+        line = Inter[i]
+        if line[0] == "中间树":
+            Inter = Inter[i+1:]
+            break
+
+    num = -1
+    # for line in Inter[:num]:
+    #     obj_line=line #翻译中间代码成MIPS汇编
+    #     print(obj_line)
+
+    for line in Inter[:num]:
         obj_line=translate(line) #翻译中间代码成MIPS汇编
         print(obj_line)
         if obj_line=='':
