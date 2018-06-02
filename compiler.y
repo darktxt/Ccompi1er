@@ -9,6 +9,8 @@ extern FILE *yyin;
 void yyerror(char const *s);
 int yylex();
 node* root = NULL;
+bool hasError = false;
+int errorNum = 0;
 %}
 %union{
 	class node* Node;
@@ -413,6 +415,7 @@ statement
 	| selection_statement	{$$=$1;}
 	| iteration_statement	{$$=$1;}
 	| jump_statement
+	| error
 	;
 
 labeled_statement
@@ -470,6 +473,7 @@ start
 translation_unit
 	: external_declaration														{$$=$1;}
 	| translation_unit external_declaration												{node* t=$1;while(t->next)t=t->next;t->next=$2;}
+	| error																
 	;
 
 external_declaration
@@ -485,6 +489,7 @@ function_definition
 declaration_list											//This case is abandoned.
 	: declaration
 	| declaration_list declaration
+	| error
 	;
 
 
@@ -492,6 +497,9 @@ declaration_list											//This case is abandoned.
 void yyerror(char const *s)
 {
 	fflush(stdout);
-	printf("\n%*s\n%*s\n", column, "^", column, s);
+	//printf("\n%*s\n%*s\n", column, "^", column, s);
+	printf("--------error here!\n");
+	hasError = true;
+	errorNum++;
 }
 
