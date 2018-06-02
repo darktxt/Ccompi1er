@@ -105,13 +105,13 @@ def write_to_txt(Obj):
     f=open('./MIPS/objectcode.asm','w')
     template='''
 .data
-_prompt: .asciiz "Enter an integer:"
+_hint: .asciiz "Input:"
 _ret: .asciiz "\\n"
 .globl main
 .text
 read:
     li $v0,4
-    la $a0,_prompt
+    la $a0,_hint
     syscall
     li $v0,5
     syscall

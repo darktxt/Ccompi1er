@@ -1,13 +1,12 @@
-int fact(int x){
-	int s = 2*x + 1;
-	return s;
+int s(){
+	int a = 1;
 }
-
 
 void main()
 {
-	int a;
-	a = read();
-	a = fact(a);
-	print(a);
+	int a = 5;
+	int c = a;
+	int b = a + 1;
+	print(c);
+	s();
 }

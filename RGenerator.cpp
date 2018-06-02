@@ -2,6 +2,7 @@
 #include "node.h"
 #include <string>
 #include <vector>
+#include "ErrorLog.cpp"
 using namespace std;
 
 char* itoa(int i){
@@ -130,7 +131,7 @@ public:
 	}
 
 	void printAllFunc(){
-		cout << "--------------函数表----------------" << endl;
+		cout << endl <<  "--------------函数表----------------" << endl;
 		for(int i=0;i<size;i++){
 			cout << Record[i].functype << "  " << Record[i].funcname << "  ";
 			for(int j=0;j<Record[i].getParaNum();j++){
@@ -138,6 +139,19 @@ public:
 			}
 			cout << endl;
 		}
+	}
+
+	bool funcExist(string funcname){
+		if(funcname.compare("print")==0 || funcname.compare("read")==0){
+			return true;
+		}
+		for(int i=0;i<Record.size();i++){
+			string name = Record[i].funcname;
+			if(funcname.compare(name) == 0){
+				return true;
+			}
+		}
+		return false;
 	}
 };
 
@@ -151,6 +165,7 @@ class RGenerator{
 	int endlabel;
 	bool func_call_visual = true;
 	Function FunctionRecord;
+	ErrorLog Log;
 public:
     RGenerator(node* root){
         this->root = root;
@@ -162,6 +177,7 @@ public:
         stratTranslate(this->root,r);
 		cout << endl << endl << endl;
 		FunctionRecord.printAllFunc();
+		Log.printErrorLog();
     }
 
 	~RGenerator(){
@@ -222,7 +238,6 @@ public:
             else if(t->type.compare("parameter_declaration")==0){
 				// cout << "PARAM " <<  t->contents[0]->content << endl;
                 cout << "PARAM " <<  t->contents[1]->content << endl;
-				
 				r.setVar(t->contents[1]->content,t->contents[0]->content);
                 loop(t,r);
             }
@@ -378,6 +393,12 @@ public:
 			}
 
 			else if(t->type == "function_call"){
+				string funcname = t->sub[0]->contents[0]->content;
+				if (FunctionRecord.funcExist(funcname)== false){
+					string hint = "No function named with ";
+					hint += funcname;
+					Log.addLog(hint,t->sub[0]->contents[0]->lineNum);
+				}
 				// have parameter
 				if(t->sub.size()==2){
 					node* s = t->sub[1];

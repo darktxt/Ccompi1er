@@ -2980,7 +2980,7 @@ void yyerror(char const *s)
 {
 	fflush(stdout);
 	//printf("\n%*s\n%*s\n", column, "^", column, s);
-	printf("--------error here!\n");
+	printf("%s--------error here!\n",s);
 	hasError = true;
 	errorNum++;
 }

@@ -13,6 +13,7 @@
         "vector": "cpp",
         "algorithm": "c",
         "iostream": "cpp",
-        "__bit_reference": "cpp"
+        "__bit_reference": "cpp",
+        "iosfwd": "cpp"
     }
 }

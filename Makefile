@@ -7,5 +7,8 @@ g++ -std=c++11 -o compiler compiler.cpp mylex.cpp main.cpp
 echo "--------------AST代码----------------"
 cat ./MIPS/intercode.txt
 python3 ./MIPS/MIPS.py >> 2
+echo ""
 echo "--------------目标代码----------------"
 cat ./MIPS/objectcode.asm
+echo ""
+cat ./ErrorLog.txt
