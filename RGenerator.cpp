@@ -1,32 +1,9 @@
 #include <iostream>
 #include "node.h"
+#include "CodeGen.cpp"
 #include <string>
-#include <unordered_map>
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/TargetRegistry.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetOptions.h"
-
-
 #include <vector>
-using namespace llvm;
 
-// llvm part
-static LLVMContext context;
-// one module for now and for test
-static Module *module = new Module("test", context);
-// ir builder
-static IRBuilder<> builder(context);
 using namespace std;
 
 char* itoa(int i){
@@ -134,7 +111,8 @@ class RGenerator{
 	bool *labels;
 	const int MAX_LABELS = 1000;
 	Data r = Data(32);
-	unordered_map <string, Value*> var_map;
+	// generate llvm IR
+	CodeGen cg = CodeGen("test");
 
 	bool isloop;
 	int startlabel;
@@ -186,20 +164,13 @@ public:
             if(t->type.compare("function_definition")==0){
                 cout << "FUNCTION " << t->contents[1]->content << " :" << endl;
 				if(t->contents[1]->content.find("main")!= -1){
-					auto funcType = FunctionType::get(builder.getVoidTy(), false);
-					auto mainFunc =
-						Function::Create(funcType, Function::ExternalLinkage, "main", module);
-					auto entry = BasicBlock::Create(context, "entrypoint", mainFunc);
-					builder.SetInsertPoint(entry);
-                	//cout << t->sub[0]->type<<endl;
-					//cout << t->sub[0]->contents[0]->content<<endl;
-					//cout << t->sub.size()<<endl;
+					cg.getFunction("main");
 					loop(t,r);
+					cg.createRet("void");
 				}
 				else{
 					loop(t,r);
 				}
-				builder.CreateRetVoid();
             }
 
             else if(t->type.compare("parameter_declaration")==0){
@@ -242,9 +213,7 @@ public:
 						cout<<"Temp"<<itoa(i)<<" = "<<"#"<<tt->contents[0]->content<<endl;
 						r3 = string("Temp").append(itoa(i));
 						// int for now
-						auto number = ConstantInt::get(Type::getInt32Ty(context), stoi(tt->contents[0]->content));
-						var_map[r3] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, r3);
-						builder.CreateStore(number, var_map[r3]);
+						cg.createTempVar(stoi(tt->contents[0]->content), r3);
 					}						
                 }
 				else{
@@ -267,31 +236,14 @@ public:
 				if(tt->contents[0]->name.compare("assignment_operator")==0){
 					cout<< r1<<" "<<r2<<" "<<r3<<endl;
 					value = r1;
-					// cout << "debug-- + "<< endl;
-					// for( const auto& n : var_map ) {
-					// 	std::cout << "Key:[" << n.first <<"]\n";
-					// }
-					// 	cout << "----" << endl;
-					var_map[r1] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, r1);
-					builder.CreateStore(var_map[r3], var_map[r1]);
+					cg.createAssignVar(r1, r3);
 					// a = b
 				}
 				else{
 					l = string("Temp").append(itoa(r.getTemp()));
 					value = l;
 					cout<< l<<" = "<<r1<<" "<<r2<<" "<<r3<<endl;
-					if (r2 == "+") {
-						var_map[l] = builder.CreateAdd(var_map[r1], var_map[r3], l);
-					}
-					else if (r2 == "-") {
-						var_map[l] = builder.CreateSub(var_map[r1], var_map[r3], l);
-					}
-					else if (r2 == "*") {
-						var_map[l] = builder.CreateMul(var_map[r1], var_map[r3], l);
-					}
-					else if (r2 == "/") {
-						var_map[l] = builder.CreateSDiv(var_map[r1], var_map[r3], l);
-					}
+					cg.createBinOp(l, r1, r2, r3);
 				}
 				         
             }
@@ -414,8 +366,9 @@ public:
 					}
 					
 				}
-				if(func_call_visual == true)
+				if(func_call_visual == true) {
 					cout << "CALL " << t->sub[0]->contents[0]->content << endl;
+				}
 				else{
 					func_call_visual = true;
 				}
