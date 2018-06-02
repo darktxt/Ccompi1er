@@ -12,6 +12,8 @@
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetOptions.h"
+// #include "llvm/Transforms/Scalar.h"
+// #include "llvm/Transforms/Scalar/GVN.h"
 #include <unordered_map>
 #include <string>
 #include <vector>
@@ -21,15 +23,16 @@ using namespace llvm;
 // llvm part
 static LLVMContext context;
 // one module for now and for test
-static Module *module;
+static std::unique_ptr<Module> module;
 // ir builder
 static IRBuilder<> builder(context);
 
 class CodeGen {
     std::unordered_map <std::string, Value*> var_map;
+    std::unordered_map <std::string, Value*> temp_var;
 public:	
     CodeGen(std::string module_name) {
-        module = new Module(module_name, context);
+        module = llvm::make_unique<Module>(module_name, context);
     }
 
     void getFunction(std::string name) {
@@ -40,7 +43,7 @@ public:
 
     void getMainFunction() {
         auto funcType = FunctionType::get(builder.getVoidTy(), false);
-        auto mainFunc = Function::Create(funcType, Function::ExternalLinkage, "main", module);
+        auto mainFunc = Function::Create(funcType, Function::ExternalLinkage, "main", module.get());
         auto entry = BasicBlock::Create(context, "entrypoint", mainFunc);
         builder.SetInsertPoint(entry);
     }
@@ -58,7 +61,7 @@ public:
         argsValue.push_back(formatString);
         argsType.push_back(formatString->getType());
         for (auto arg: args) {
-            auto value = var_map[arg];
+            auto value = getVarValue(arg);
             argsValue.push_back(value);
             argsType.push_back(value->getType());
         }
@@ -74,29 +77,46 @@ public:
     }
 
     void createTempVar(int value, std::string name) {
-        auto number = ConstantInt::get(Type::getInt32Ty(context), value);
-        var_map[name] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, name);
-        builder.CreateStore(number, var_map[name]);
+        temp_var[name] = ConstantInt::get(Type::getInt32Ty(context), value);
     }
 
     void createAssignVar(std::string leftName, std::string rightName) {
-        var_map[leftName] = builder.CreateLoad(var_map[rightName], leftName);
+        var_map[leftName] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, leftName);
+        auto temp = getVarValue(rightName);
+        builder.CreateStore(temp, var_map[leftName]);
+    }
+
+    Value* getVarValue(std::string name) {
+        Value* temp = nullptr;
+        auto search = var_map.find(name);
+        if (search != var_map.end()) {
+            temp = builder.CreateLoad(var_map[name], "loadtemp");
+        }
+        else {
+             temp = temp_var[name];
+        }
+        return temp;
     }
 
     void createBinOp(std::string leftName, std::string r1, std::string r2, std::string r3) {
+        auto tempLeft = getVarValue(r1);
+        auto tempRight = getVarValue(r3);
+        Value* result = nullptr;
         if (r2 == "+") {
-            var_map[leftName] = builder.CreateAdd(var_map[r1], var_map[r3], leftName);
+            result = builder.CreateAdd(tempLeft, tempRight, "binoptemp");
         }
         else if (r2 == "-") {
-            var_map[leftName] = builder.CreateSub(var_map[r1], var_map[r3], leftName);
+            result = builder.CreateSub(tempLeft, tempRight, "binoptemp");
         }
         else if (r2 == "*") {
-            var_map[leftName] = builder.CreateMul(var_map[r1], var_map[r3], leftName);
+            result = builder.CreateMul(tempLeft, tempRight, "binoptemp");
         }
         else if (r2 == "/") {
-            var_map[leftName] = builder.CreateSDiv(var_map[r1], var_map[r3], leftName);
+            result = builder.CreateSDiv(tempLeft, tempRight, "binoptemp");
         }
         // ----todo----
+        var_map[leftName] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, leftName);
+        builder.CreateStore(result, var_map[leftName]);
     }
 
     int generateObjectCode() {
@@ -153,6 +173,10 @@ public:
 
         outs() << "Wrote " << Filename << "\n";
         return 0;
+    }
+
+    void eraseTempVar(std::string key) {
+        temp_var.erase(key);
     }
 
 };
