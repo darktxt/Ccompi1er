@@ -238,11 +238,9 @@ public:
 					}
 				}
 				FunctionRecord.addfunc(f);
-				string retTypeName = t->contents[0]->content;
-				string funcName = t->contents[1]->content;
-				cg.getFunction(funcName, retTypeName);
+				cg.getFunction(f.funcname, f.functype);
 				loop(t,r);
-				cg.createRet(retTypeName);
+				cg.createRet(f.funcname, f.functype);
             }
 
             else if(t->type.compare("parameter_declaration")==0){
