@@ -394,6 +394,7 @@ public:
 			}
 
 			else if(t->type == "function_call"){
+				string res;
 				string funcname = t->sub[0]->contents[0]->content;
 				if (FunctionRecord.funcExist(funcname)== false){
 					string hint = "No function named with ";
@@ -423,6 +424,17 @@ public:
 								argname += to_string(r.getVar(s->contents[0]->content));
 								ARG.push_back(argname);
 							}
+						}
+						else if(s->type == "function_call"){
+							stratTranslate(s,r);
+							int i = r.getTemp();
+							res = "Temp";
+							res += to_string(i);
+							cout << res << " = " << "CALL " << s->sub[0]->contents[0]->content << endl;
+							func_call_visual = false;
+							cout << "ARG " << res << endl;
+							ARG.push_back(res);
+							r.releaseTemp(i);
 						}
 						else{
 							string res = stratTranslate(s,r);

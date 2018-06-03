@@ -1,4 +1,4 @@
-int s(int x){
+int s1(int x){
 	int y = x + 1;
 	int z = x - 1;
 	return y*z;
@@ -8,11 +8,11 @@ int s(int x){
 void main()
 {
 	int a = read();
-	int c = s(s(a));
+	int c = s(s(3));
 	print(c);
 }function_definition
 1  type_specifier  int
-1  IDENTIFIER  s
+1  IDENTIFIER  s1
 sub0
 parameter_declaration
 1  type_specifier  int
@@ -142,7 +142,7 @@ primary_expression
 11  IDENTIFIER  s
 sub1
 primary_expression
-11  IDENTIFIER  a
+11  CONSTANT  3
 function_call
 sub0
 primary_expression
@@ -154,7 +154,7 @@ primary_expression
 
 
 中间树
-FUNCTION s :
+FUNCTION s1 :
 PARAM var0
 Temp0 = #1
 Temp1 = var0 + Temp0
@@ -167,11 +167,13 @@ RETURN Temp0
 FUNCTION main :
 Temp0 = CALL read
 var0 = Temp0
-ARG var0
-ARG 
-CALL s
-Temp0 = CALL s
-var1 = Temp0
+Temp0 = #3
+ARG Temp0
+Temp1 = CALL s
+ARG Temp1
+ARG Temp1
+Temp1 = CALL s
+var1 = Temp1
 ARG var1
 CALL print
 
@@ -179,5 +181,5 @@ CALL print
 
 
 --------------函数表----------------
-int  s  int  x  
+int  s1  int  x  
 void  main  

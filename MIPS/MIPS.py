@@ -1,8 +1,8 @@
 import os
 import re
 
-# regs=['$t0','$t1','$t2','$t3','$t4','$t5','$t6','$s0','$s1','$s2','$s3','$s4','$s5','$s6','s7'] # 't8' 't9'
-regs=['$t0','$t1'] # 't7' 't8' 't9'
+regs=['$t0','$t1','$t2','$t3','$t4','$t5','$t6','$s0','$s1','$s2','$s3','$s4','$s5','$s6','s7'] # 't8' 't9'
+# regs=['$t0','$t1'] # 't7' 't8' 't9'
 regspecial = ['$t7', '$t8', '$t9']
 specialindex = 0 # 3个特殊寄存器，主要负责导入导出内存溢出变量
 specialrecord = {} # 记录这三个寄存器存的东西
@@ -88,7 +88,6 @@ def get_R(string):
 
 
 def translate(line):
-    print(line)
     if line[0]=='LABEL':
         return line[1]+':'
     if line[1]=='=':
