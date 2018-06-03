@@ -67,14 +67,19 @@ public:
 		node* t = this;
 		while (t) {
 			cout<<endl;
-			cout<<"node id "<<t->id<<endl;
+			cout<<"nodeid "<<t->id<<endl;
 			if(t->parent)
-			cout<<"parent id "<<t->parent->id<<endl;
+			cout<<"parentid "<<t->parent->id<<endl;
+			else
+			cout<<"parentid "<<"-1"<<endl;
 			if(t->next)
-			cout<<"next id "<<t->next->id<<endl;
+			cout<<"nextid "<<t->next->id<<endl;
+			else
+			cout<<"nextid "<<"-1"<<endl;
+			if(t->type.compare("")!=0)
 			cout << t->type << endl;
 			for (int i = 0; i < t->contents.size(); i++)
-				cout << t->contents[i]->lineNum << "  " << t->contents[i]->name << "  " << t->contents[i]->content << endl<<endl;
+				cout << t->contents[i]->lineNum << "  " << t->contents[i]->name << "  " << t->contents[i]->content << endl;
 			if(expand)
 				for (int i = 0; i < t->sub.size(); i++)
 					{/*cout<<"sub"<<i<<endl;*/t->sub[i]->debugInfo();}

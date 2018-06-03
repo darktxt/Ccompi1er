@@ -1,321 +1,341 @@
 
-node id 10
-next id 63
+nodeid 10
+parentid -1
+nextid 63
 function_definition
 1  type_specifier  int
-
 1  IDENTIFIER  s
 
-
-node id 9
-parent id 10
+nodeid 9
+parentid 10
+nextid -1
 declaration
 
-node id 2
-parent id 9
+nodeid 2
+parentid 9
+nextid -1
 type_specifier
 2  type_specifier  int
 
-
-node id 8
-parent id 9
+nodeid 8
+parentid 9
+nextid -1
 init_declarator_list
 
-node id 3
-parent id 8
+nodeid 3
+parentid 8
+nextid -1
 direct_declarator
 2  IDENTIFIER  a
 
-
-node id 5
-parent id 3
+nodeid 5
+parentid 3
+nextid -1
 initializer_expression
 
-node id 7
-parent id 5
+nodeid 7
+parentid 5
+nextid -1
 direct_declarator
 2  IDENTIFIER  a
 
-
-node id 6
-parent id 5
+nodeid 6
+parentid 5
+nextid -1
 assignment_operator
 2  assignment_operator  =
 
-
-node id 4
-parent id 5
+nodeid 4
+parentid 5
+nextid -1
 primary_expression
 2  CONSTANT  1
 
-
-node id 63
+nodeid 63
+parentid -1
+nextid -1
 function_definition
 5  type_specifier  void
-
 5  IDENTIFIER  main
 
-
-node id 20
-parent id 63
-next id 28
+nodeid 20
+parentid 63
+nextid 28
 declaration
 
-node id 13
-parent id 20
+nodeid 13
+parentid 20
+nextid -1
 type_specifier
 7  type_specifier  int
 
-
-node id 19
-parent id 20
+nodeid 19
+parentid 20
+nextid -1
 init_declarator_list
 
-node id 14
-parent id 19
+nodeid 14
+parentid 19
+nextid -1
 direct_declarator
 7  IDENTIFIER  a
 
-
-node id 16
-parent id 14
+nodeid 16
+parentid 14
+nextid -1
 initializer_expression
 
-node id 18
-parent id 16
+nodeid 18
+parentid 16
+nextid -1
 direct_declarator
 7  IDENTIFIER  a
 
-
-node id 17
-parent id 16
+nodeid 17
+parentid 16
+nextid -1
 assignment_operator
 7  assignment_operator  =
 
-
-node id 15
-parent id 16
+nodeid 15
+parentid 16
+nextid -1
 primary_expression
 7  CONSTANT  5
 
-
-node id 28
-next id 57
+nodeid 28
+parentid -1
+nextid 57
 declaration
 
-node id 21
-parent id 28
+nodeid 21
+parentid 28
+nextid -1
 type_specifier
 8  type_specifier  int
 
-
-node id 27
-parent id 28
+nodeid 27
+parentid 28
+nextid -1
 init_declarator_list
 
-node id 22
-parent id 27
+nodeid 22
+parentid 27
+nextid -1
 direct_declarator
 8  IDENTIFIER  c
 
-
-node id 24
-parent id 22
+nodeid 24
+parentid 22
+nextid -1
 initializer_expression
 
-node id 26
-parent id 24
+nodeid 26
+parentid 24
+nextid -1
 direct_declarator
 8  IDENTIFIER  c
 
-
-node id 25
-parent id 24
+nodeid 25
+parentid 24
+nextid -1
 assignment_operator
 8  assignment_operator  =
 
-
-node id 23
-parent id 24
+nodeid 23
+parentid 24
+nextid -1
 primary_expression
 8  IDENTIFIER  a
 
-
-node id 57
-next id 60
+nodeid 57
+parentid -1
+nextid 60
 declaration
 
-node id 29
-parent id 57
+nodeid 29
+parentid 57
+nextid -1
 type_specifier
 9  type_specifier  int
 
-
-node id 56
-parent id 57
+nodeid 56
+parentid 57
+nextid -1
 init_declarator_list
 
-node id 30
-parent id 56
+nodeid 30
+parentid 56
+nextid -1
 direct_declarator
 9  IDENTIFIER  b
 
-
-node id 53
-parent id 30
+nodeid 53
+parentid 30
+nextid -1
 initializer_expression
 
-node id 55
-parent id 53
+nodeid 55
+parentid 53
+nextid -1
 direct_declarator
 9  IDENTIFIER  b
 
-
-node id 54
-parent id 53
+nodeid 54
+parentid 53
+nextid -1
 assignment_operator
 9  assignment_operator  =
 
-
-node id 51
-parent id 53
+nodeid 51
+parentid 53
+nextid -1
 additive_expression
 
-node id 45
-parent id 51
+nodeid 45
+parentid 51
+nextid -1
 additive_expression
 
-node id 36
-parent id 45
+nodeid 36
+parentid 45
+nextid -1
 additive_expression
 
-node id 33
-parent id 36
+nodeid 33
+parentid 36
+nextid -1
 additive_expression
 
-node id 31
-parent id 33
+nodeid 31
+parentid 33
+nextid -1
 primary_expression
 9  IDENTIFIER  a
 
-
-node id 34
-parent id 33
+nodeid 34
+parentid 33
+nextid -1
 unary_operator
 9  unary_operator  +
 
-
-node id 32
-parent id 33
+nodeid 32
+parentid 33
+nextid -1
 primary_expression
 9  CONSTANT  1
 
-
-node id 37
-parent id 36
+nodeid 37
+parentid 36
+nextid -1
 unary_operator
 9  unary_operator  +
 
-
-node id 35
-parent id 36
+nodeid 35
+parentid 36
+nextid -1
 primary_expression
 9  CONSTANT  3
 
-
-node id 46
-parent id 45
+nodeid 46
+parentid 45
+nextid -1
 unary_operator
 9  unary_operator  +
 
-
-node id 43
-parent id 45
+nodeid 43
+parentid 45
+nextid -1
 multiplicative_expression
 
-node id 40
-parent id 43
+nodeid 40
+parentid 43
+nextid -1
 multiplicative_expression
 
-node id 38
-parent id 40
+nodeid 38
+parentid 40
+nextid -1
 primary_expression
 9  CONSTANT  6
 
-
-node id 41
-parent id 40
+nodeid 41
+parentid 40
+nextid -1
 unary_operator
 9  unary_operator  *
 
-
-node id 39
-parent id 40
+nodeid 39
+parentid 40
+nextid -1
 primary_expression
 9  CONSTANT  9
 
-
-node id 44
-parent id 43
+nodeid 44
+parentid 43
+nextid -1
 unary_operator
 9  unary_operator  *
 
-
-node id 42
-parent id 43
+nodeid 42
+parentid 43
+nextid -1
 primary_expression
 9  CONSTANT  5
 
-
-node id 52
-parent id 51
+nodeid 52
+parentid 51
+nextid -1
 unary_operator
 9  unary_operator  +
 
-
-node id 49
-parent id 51
+nodeid 49
+parentid 51
+nextid -1
 multiplicative_expression
 
-node id 47
-parent id 49
+nodeid 47
+parentid 49
+nextid -1
 primary_expression
 9  CONSTANT  9
 
-
-node id 50
-parent id 49
+nodeid 50
+parentid 49
+nextid -1
 unary_operator
 9  unary_operator  *
 
-
-node id 48
-parent id 49
+nodeid 48
+parentid 49
+nextid -1
 primary_expression
 9  CONSTANT  7
 
-
-node id 60
-next id 62
+nodeid 60
+parentid -1
+nextid 62
 function_call
 
-node id 58
-parent id 60
+nodeid 58
+parentid 60
+nextid -1
 primary_expression
 10  IDENTIFIER  print
 
-
-node id 59
-parent id 60
+nodeid 59
+parentid 60
+nextid -1
 primary_expression
 10  IDENTIFIER  c
 
-
-node id 62
+nodeid 62
+parentid -1
+nextid -1
 function_call
 
-node id 61
-parent id 62
+nodeid 61
+parentid 62
+nextid -1
 primary_expression
 11  IDENTIFIER  s
-
