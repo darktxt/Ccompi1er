@@ -35,6 +35,7 @@ static IRBuilder<> builder(context);
 
 class CodeGen {
     std::unordered_map <std::string, Value*> var_map;
+    // std::unordered_map <std::string, Value*> global_var;
     std::unordered_map <std::string, Value*> temp_var;
 public:	
     CodeGen(std::string module_name) {
@@ -50,11 +51,11 @@ public:
     }
 
 
-    void createRet(std::string funcName, std::string retTypeName) {
+    void createRet(std::string retTypeName, Value* val) {
         if (retTypeName == "void")
             builder.CreateRetVoid();
         else if (retTypeName == "int")
-            builder.CreateRet(ConstantInt::get(Type::getInt32Ty(context), 0));
+            builder.CreateRet(val);
         // -- todo --
     }
 
@@ -74,13 +75,26 @@ public:
 
     }
 
-    void callFunction(std::string name, const std::vector<std::string>& args) {
+    Value* callFunction(std::string name, const std::vector<std::string>& args) {
         if (name == "print") {
-            callPrintFunction(args);
+            return callPrintFunction(args);
+        }
+        else {
+            std::vector<Type *> argsType;
+            std::vector<Value *> argsValue;
+            for (auto arg: args) {
+                auto value = getVarValue(arg);
+                argsValue.push_back(value);
+                argsType.push_back(value->getType());
+            }
+            ArrayRef<Type *> argsRef(argsType);
+            auto funcType = FunctionType::get(builder.getInt32Ty(), argsRef, false);
+            auto funcFunc = module->getOrInsertFunction(name, funcType);
+            return builder.CreateCall(funcFunc, argsValue);
         }
     }
 
-    void callPrintFunction(const std::vector<std::string>& args) {
+    Value* callPrintFunction(const std::vector<std::string>& args) {
         std::vector<Type *> argsType;
         std::vector<Value *> argsValue;
         auto formatString = builder.CreateGlobalStringPtr("%d\n");
@@ -94,7 +108,7 @@ public:
         ArrayRef<Type *> argsRef(argsType);
         auto printfType = FunctionType::get(builder.getInt32Ty(), argsRef, false);
         auto printfFunc = module->getOrInsertFunction("printf", printfType);
-        builder.CreateCall(printfFunc, argsValue);
+        return builder.CreateCall(printfFunc, argsValue);
     }
 
     void createTempVar(int value, std::string name) {
@@ -106,6 +120,11 @@ public:
         auto temp = getVarValue(rightName);
         builder.CreateStore(temp, var_map[leftName]);
     }
+
+    void createAssignVar(std::string name, Value* val) {
+        var_map[name] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, name);
+        builder.CreateStore(val, var_map[name]);
+    } 
 
     Value* getVarValue(std::string name) {
         Value* temp = nullptr;
@@ -134,6 +153,12 @@ public:
         }
         else if (r2 == "/") {
             result = builder.CreateSDiv(tempLeft, tempRight, "binoptemp");
+        }
+        else if (r2 == "==") {
+            result = builder.CreateICmpEQ(tempLeft, tempRight, "binoptemp");
+        }
+        else if (r2 == "!=") {
+            result = builder.CreateICmpNE(tempLeft, tempRight, "binoptemp");
         }
         // ----todo----
         var_map[leftName] = builder.CreateAlloca(Type::getInt32Ty(context), NULL, leftName);

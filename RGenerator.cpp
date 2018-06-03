@@ -116,13 +116,15 @@ struct funcrecord{
 	string functype;
 	string funcname;
 	vector<para> funcpara; 
+	std::unordered_map <std::string, Value*> var_map;
+	Value* retVal = nullptr;		// fix -> a = func(par)
 	int getParaNum(){
 		return funcpara.size();
 	}
 };
 
 
-class Function{
+class FunctionAst{
 public:
 	vector<funcrecord> Record;	
 	int size = 0;
@@ -154,6 +156,15 @@ public:
 		}
 		return false;
 	}
+
+	funcrecord* lookupFunc(string name) {
+		for(auto &item: Record) {
+			if (item.funcname == name) {
+				return &item;
+			}
+		}
+		return nullptr;
+	}
 };
 
 class RGenerator{
@@ -168,8 +179,10 @@ class RGenerator{
 	int startlabel;
 	int endlabel;
 	bool func_call_visual = true;
-	Function FunctionRecord;
+	FunctionAst FunctionRecord;
 	ErrorLog Log;
+
+	Value* runRetVal;
 public:
     RGenerator(node* root){
         this->root = root;
@@ -206,12 +219,12 @@ public:
 	}
 
 
-	string stratTranslate(node* root,Data* r) {
-		return stratTranslate(root, *r);
+	string stratTranslate(node* root,Data* r, string funcName = "global") {
+		return stratTranslate(root, *r, funcName);
 	}      
 	  
 
-    string stratTranslate(node* root,Data &r) {
+    string stratTranslate(node* root,Data &r,string funcName = "global") {
 		node* t = root;
 		string value="";
 		while (t) {
@@ -239,15 +252,16 @@ public:
 				}
 				FunctionRecord.addfunc(f);
 				cg.getFunction(f.funcname, f.functype);
-				loop(t,r);
-				cg.createRet(f.funcname, f.functype);
+				loop(t,r,f.funcname);
+				auto result = FunctionRecord.lookupFunc(f.funcname);
+				cg.createRet(f.functype, result->retVal);
             }
 
             else if(t->type.compare("parameter_declaration")==0){
 				// cout << "PARAM " <<  t->contents[0]->content << endl;
                 cout << "PARAM " <<  t->contents[1]->content << endl;
 				r.setVar(t->contents[1]->content,t->contents[0]->content);
-                loop(t,r);
+                loop(t,r,funcName);
             }
             else if (t->type.compare("declaration")==0){
 				string ttype = t->sub[0]->contents[0]->content;
@@ -255,7 +269,7 @@ public:
 					node* tt = t->sub[1]->sub[i];
 					//cout<<"debug----"<<tt->contents[0]->content<<endl;
 					r.setVar(tt->contents[0]->content,ttype);
-					loop(tt,r);
+					loop(tt,r,funcName);
 				}
             }
 			else if (t->type.find("expression")!=-1&&t->type.compare("conditional_expression2")!=0){
@@ -272,7 +286,7 @@ public:
 					}						
                 }
 				else
-                	r1 = stratTranslate(tt,new Data(r));  
+                	r1 = stratTranslate(tt,new Data(r),funcName);  
 				
 		
 				tt=t->sub[2];
@@ -290,15 +304,19 @@ public:
                 }
 				else{
 					if(tt->type == "function_call"){
+						cout << "debug--\n"; 
 						func_call_visual = false;
-						stratTranslate(tt,r);
+						runRetVal = nullptr;
+						stratTranslate(tt,r,funcName);
 						int i = r.getTemp();
 						cout << "Temp" << i << " = CALL " << tt->sub[0]->contents[0]->content << endl;
 						r3 = string("Temp") + to_string(i);
 						r.releaseTemp(i);
+						cg.createAssignVar(r3, runRetVal);
+						// todo
 					}
 					else{
-						r3 = stratTranslate(tt,new Data(r));
+						r3 = stratTranslate(tt,new Data(r),funcName);
 					}
                 	//
 				}
@@ -306,6 +324,7 @@ public:
 				tt = t->sub[1];
 				r2 = tt->contents[0]->content;
 				if(tt->contents[0]->name.compare("assignment_operator")==0){
+					// cout << "debug--";
 					cout<< r1<<" "<<r2<<" "<<r3<<endl;
 					value = r1;
 					cg.createAssignVar(r1, r3);
@@ -324,13 +343,13 @@ public:
             }
 
 			else if(t->type == "if_statement"){
-				string resReg = stratTranslate(t->sub[0],r);
+				string resReg = stratTranslate(t->sub[0],r,funcName);
 				int label_true = getLabel();
 				int label_false = getLabel();
 				cout << "IF " << resReg << " == 0 GOTO label_" << label_true << endl;
 				cout << "GOTO label_" << label_false << endl;
 				cout << "LABEL label_" << label_true<<" :" << endl;
-				stratTranslate(t->sub[1],r);
+				stratTranslate(t->sub[1],r,funcName);
 				cout << "LABEL label_" << label_false <<" :" << endl;
 			}
 
@@ -339,14 +358,14 @@ public:
 				int label_true = getLabel();
 				int label_false = getLabel();
 				int label_next = getLabel();
-				string resReg = stratTranslate(t->sub[0],r);
+				string resReg = stratTranslate(t->sub[0],r,funcName);
 				cout << "IF " << resReg << " != 0 GOTO label_" << label_true << endl;
 				cout << "GOTO label_" << label_false << endl;
 				cout << "LABEL label_" << label_true<<" :" << endl;
-				stratTranslate(t->sub[1],r);
+				stratTranslate(t->sub[1],r,funcName);
 				cout << "GOTO label_" << label_next << endl;
 				cout << "LABEL label_" << label_false <<" :" << endl;
-				stratTranslate(t->sub[2],r);
+				stratTranslate(t->sub[2],r,funcName);
 				cout << "LABEL label_" << label_next <<" :" << endl;
 			}
 
@@ -367,11 +386,11 @@ public:
 				endlabel = label_end;
 
 				cout << "LABEL label_" << label_while <<" :" << endl;
-				string resReg = stratTranslate(t->sub[0],r);
+				string resReg = stratTranslate(t->sub[0],r,funcName);
 				cout << "IF " << resReg << " != 0 GOTO label_" << label_start << endl;
 				cout << "GOTO label_" << label_end << endl;
 				cout << "LABEL label_" << label_start <<" :" << endl;
-				stratTranslate(t->sub[1],r);
+				stratTranslate(t->sub[1],r,funcName);
 				cout << "GOTO label_" << label_while << endl;
 				cout << "LABEL label_" << label_end <<" :" << endl;
 			}
@@ -381,9 +400,9 @@ public:
 				startlabel = getLabel();
 				endlabel = getLabel();
 				cout << "LABEL label_" << beginlabel <<" :" << endl;
-				stratTranslate(t->sub[0],r);
+				stratTranslate(t->sub[0],r,funcName);
 				cout << "LABEL label_" << startlabel <<" :" << endl;
-				string resReg = stratTranslate(t->sub[1],r);
+				string resReg = stratTranslate(t->sub[1],r,funcName);
 				cout << "IF " << resReg << " != 0 GOTO label_" << beginlabel << endl;
 				cout << "LABEL label_" << endlabel <<" :" << endl;
 
@@ -397,15 +416,15 @@ public:
 				startlabel = getLabel();
 				endlabel = getLabel();
 
-				stratTranslate(t->sub[0],r);
+				stratTranslate(t->sub[0],r,funcName);
 				cout << "LABEL label_" << label_judge <<" :" << endl;
-				string resReg = stratTranslate(t->sub[1],r);
+				string resReg = stratTranslate(t->sub[1],r,funcName);
 				cout << "IF " << resReg << " != 0 GOTO label_" << label_start << endl;
 				cout << "GOTO label_" << endlabel << endl;
 				cout << "LABEL label_" << label_start <<" :" << endl;
-				stratTranslate(t->sub[3],r);
+				stratTranslate(t->sub[3],r,funcName);
 				cout << "LABEL label_" << startlabel <<" :" << endl;
-				stratTranslate(t->sub[2],r);
+				stratTranslate(t->sub[2],r,funcName);
 				cout << "GOTO label_" << label_judge << endl;
 				cout << "LABEL label_" << endlabel <<" :" << endl;
 			}
@@ -443,7 +462,7 @@ public:
 							}
 						}
 						else{
-							string res = stratTranslate(s,r);
+							string res = stratTranslate(s,r,funcName);
 							ARG.push_back(res);
 						}
 
@@ -453,15 +472,14 @@ public:
 						cout << "ARG" << " "  << ARG[j] << endl;
 					}
 
-
 				}
 				if(func_call_visual == true) {
 					cout << "CALL " << t->sub[0]->contents[0]->content << endl;
-					cg.callFunction(t->sub[0]->contents[0]->content, ARG);
 				}
 				else{
 					func_call_visual = true;
 				}
+				runRetVal = cg.callFunction(t->sub[0]->contents[0]->content, ARG);
 			}
 
 			else if(t->type == "return_statement"){
@@ -477,6 +495,8 @@ public:
 							cout << "Temp" << i << " = #" << s->contents[0]->content << endl;
 							res = "Temp";
 							res = res + to_string(i);
+							// int for now -- todo --
+							cg.createTempVar(stoi(s->contents[0]->content), res);
 						}
 						if(s->contents[0]->name == "IDENTIFIER"){
 							res = "var";
@@ -484,9 +504,11 @@ public:
 						}
 					}
 					else{
-						res = stratTranslate(s,r);
+						res = stratTranslate(s,r,funcName);
 					}
 					cout << "RETURN " << res << endl;
+					auto aimFuc = FunctionRecord.lookupFunc(funcName);
+					aimFuc->retVal = cg.getVarValue(res);
 				}
 			}
 			t = t->next; 
@@ -494,15 +516,15 @@ public:
 		return value;
 	}        
 	
-	void loop(node* t,Data* r){
+	void loop(node* t,Data* r, string funcName){
         for (int i = 0; i < t->sub.size(); i++){
-            stratTranslate(t->sub[i],r);
+            stratTranslate(t->sub[i],r,funcName);
         }
     }            
 
-    void loop(node* t,Data r){
+    void loop(node* t,Data r,string funcName){
         for (int i = 0; i < t->sub.size(); i++){
-            stratTranslate(t->sub[i],r);
+            stratTranslate(t->sub[i],r,funcName);
         }
     }
 
