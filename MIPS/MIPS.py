@@ -98,7 +98,7 @@ def translate(line):
     if line[0]=='ARG':
         return '\tmove $t0,$a0\n\tmove $a0,%s'%Get_R(line[-1])
     if line[0]=='PARAM':
-        table[line[-1]]='a0'
+        return '\tmove %s,$a0'%Get_R(line[1])
     return ''
 
 def write_to_txt(Obj):

@@ -1,35 +1,162 @@
-int s(){
-	int a = 1;
+int s(int x){
+	int y = x + 1;
+	print(x);
+	print(y);
+	return x*y;
 }
+
 
 void main()
 {
 	int a = 5;
-	int c = a;
-	int b = a + 1;
+	int c = s(a);
 	print(c);
-	s();
-}
+}function_definition
+1  type_specifier  int
+1  IDENTIFIER  s
+sub0
+parameter_declaration
+1  type_specifier  int
+1  IDENTIFIER  x
+sub1
+declaration
+sub0
+type_specifier
+2  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+2  IDENTIFIER  y
+sub0
+initializer_expression
+sub0
+direct_declarator
+2  IDENTIFIER  y
+sub1
+assignment_operator
+2  assignment_operator  =
+sub2
+additive_expression
+sub0
+primary_expression
+2  IDENTIFIER  x
+sub1
+unary_operator
+2  unary_operator  +
+sub2
+primary_expression
+2  CONSTANT  1
+function_call
+sub0
+primary_expression
+3  IDENTIFIER  print
+sub1
+primary_expression
+3  IDENTIFIER  x
+function_call
+sub0
+primary_expression
+4  IDENTIFIER  print
+sub1
+primary_expression
+4  IDENTIFIER  y
+return_statement
+5  reserved_keywords  return
+sub0
+multiplicative_expression
+sub0
+primary_expression
+5  IDENTIFIER  x
+sub1
+unary_operator
+5  unary_operator  *
+sub2
+primary_expression
+5  IDENTIFIER  y
+function_definition
+9  type_specifier  void
+9  IDENTIFIER  main
+sub0
+declaration
+sub0
+type_specifier
+11  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+11  IDENTIFIER  a
+sub0
+initializer_expression
+sub0
+direct_declarator
+11  IDENTIFIER  a
+sub1
+assignment_operator
+11  assignment_operator  =
+sub2
+primary_expression
+11  CONSTANT  5
+declaration
+sub0
+type_specifier
+12  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+12  IDENTIFIER  c
+sub0
+initializer_expression
+sub0
+direct_declarator
+12  IDENTIFIER  c
+sub1
+assignment_operator
+12  assignment_operator  =
+sub2
+function_call
+sub0
+primary_expression
+12  IDENTIFIER  s
+sub1
+primary_expression
+12  IDENTIFIER  a
+function_call
+sub0
+primary_expression
+13  IDENTIFIER  print
+sub1
+primary_expression
+13  IDENTIFIER  c
+
 
 
 中间树
 FUNCTION s :
+PARAM var0
 Temp0 = #1
-var0 = Temp0
+Temp1 = var0 + Temp0
+var1 = Temp1
+ARG var0
+CALL print
+ARG var1
+CALL print
+Temp0 = var0 * var1
+RETURN Temp0
 FUNCTION main :
 Temp0 = #5
 var0 = Temp0
-var1 = var0
-Temp0 = #1
-Temp1 = var0 + Temp0
-var2 = Temp1
+ARG var0
+Temp0 = CALL s
+var1 = Temp0
 ARG var1
 CALL print
-CALL s
 
 
 
 
 --------------函数表----------------
-int  s  
+int  s  int  x  
 void  main  

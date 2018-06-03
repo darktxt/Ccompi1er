@@ -237,8 +237,9 @@ public:
 
             else if(t->type.compare("parameter_declaration")==0){
 				// cout << "PARAM " <<  t->contents[0]->content << endl;
-                cout << "PARAM " <<  t->contents[1]->content << endl;
+                
 				r.setVar(t->contents[1]->content,t->contents[0]->content);
+				cout << "PARAM var" <<  r.getVar(t->contents[1]->content) << endl;
                 loop(t,r);
             }
             else if (t->type.compare("declaration")==0){
