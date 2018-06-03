@@ -5,6 +5,7 @@
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/Verifier.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/raw_ostream.h"
@@ -27,6 +28,11 @@ static std::unique_ptr<Module> module;
 // ir builder
 static IRBuilder<> builder(context);
 
+// class FunctionExp {
+//     std::unordered_map <std::string, Value*> var_map;
+//     CodeGen()
+// }
+
 class CodeGen {
     std::unordered_map <std::string, Value*> var_map;
     std::unordered_map <std::string, Value*> temp_var;
@@ -35,17 +41,37 @@ public:
         module = llvm::make_unique<Module>(module_name, context);
     }
 
-    void getFunction(std::string name) {
-        if (name == "main") {
-            getMainFunction();
+    void getFunction(std::string funcName, std::string retTypeName) {
+        auto funcType = FunctionType::get(getType(retTypeName), false);
+        auto func = Function::Create(funcType, Function::ExternalLinkage, funcName, module.get());
+        auto entry = BasicBlock::Create(context, "entry", func);
+        builder.SetInsertPoint(entry);
+        verifyFunction(*func);
+    }
+
+
+    void createRet(std::string funcName, std::string retTypeName) {
+        if (retTypeName == "void")
+            builder.CreateRetVoid();
+        else if (retTypeName == "int")
+            builder.CreateRet(ConstantInt::get(Type::getInt32Ty(context), 0));
+        // -- todo --
+    }
+
+    Type* getType(std::string name) {
+        Type* type = nullptr;
+        if (name == "void") {
+            type = Type::getVoidTy(context);
         }
+        else if (name == "int"){
+            type = Type::getInt32Ty(context);
+        }
+        // -- todo --
+        return type;
     }
 
     void getMainFunction() {
-        auto funcType = FunctionType::get(builder.getVoidTy(), false);
-        auto mainFunc = Function::Create(funcType, Function::ExternalLinkage, "main", module.get());
-        auto entry = BasicBlock::Create(context, "entrypoint", mainFunc);
-        builder.SetInsertPoint(entry);
+
     }
 
     void callFunction(std::string name, const std::vector<std::string>& args) {
@@ -69,11 +95,6 @@ public:
         auto printfType = FunctionType::get(builder.getInt32Ty(), argsRef, false);
         auto printfFunc = module->getOrInsertFunction("printf", printfType);
         builder.CreateCall(printfFunc, argsValue);
-    }
-
-    void createRet(std::string retName) {
-        if (retName == "void")
-            builder.CreateRetVoid();
     }
 
     void createTempVar(int value, std::string name) {

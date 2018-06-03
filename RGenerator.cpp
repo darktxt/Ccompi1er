@@ -218,13 +218,6 @@ public:
 			
             if(t->type.compare("function_definition")==0){
                 cout << "FUNCTION " << t->contents[1]->content << " :" << endl;
-				// if(t->contents[1]->content.find("main")!= -1){
-				// 	cg.getFunction("main");
-				// 	loop(t,r);
-				// 	cg.createRet("void");
-				// }
-				// else{
-				// 	loop(t,r);
 				struct funcrecord f;
 				f.functype = t->contents[0]->content;
 				f.funcname = t->contents[1]->content;
@@ -245,7 +238,11 @@ public:
 					}
 				}
 				FunctionRecord.addfunc(f);
+				string retTypeName = t->contents[0]->content;
+				string funcName = t->contents[1]->content;
+				cg.getFunction(funcName, retTypeName);
 				loop(t,r);
+				cg.createRet(retTypeName);
             }
 
             else if(t->type.compare("parameter_declaration")==0){
@@ -501,13 +498,13 @@ public:
 	
 	void loop(node* t,Data* r){
         for (int i = 0; i < t->sub.size(); i++){
-                stratTranslate(t->sub[i],r);
+            stratTranslate(t->sub[i],r);
         }
     }            
 
     void loop(node* t,Data r){
         for (int i = 0; i < t->sub.size(); i++){
-                stratTranslate(t->sub[i],r);
+            stratTranslate(t->sub[i],r);
         }
     }
 
