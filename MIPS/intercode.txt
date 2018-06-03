@@ -1,15 +1,14 @@
 int s(int x){
 	int y = x + 1;
-	print(x);
-	print(y);
-	return x*y;
+	int z = x - 1;
+	return y*z;
 }
 
 
 void main()
 {
-	int a = 5;
-	int c = s(a);
+	int a = read();
+	int c = s(s(a));
 	print(c);
 }function_definition
 1  type_specifier  int
@@ -47,37 +46,73 @@ unary_operator
 sub2
 primary_expression
 2  CONSTANT  1
-function_call
+declaration
 sub0
-primary_expression
-3  IDENTIFIER  print
+type_specifier
+3  type_specifier  int
 sub1
+init_declarator_list
+sub0
+direct_declarator
+3  IDENTIFIER  z
+sub0
+initializer_expression
+sub0
+direct_declarator
+3  IDENTIFIER  z
+sub1
+assignment_operator
+3  assignment_operator  =
+sub2
+additive_expression
+sub0
 primary_expression
 3  IDENTIFIER  x
-function_call
-sub0
-primary_expression
-4  IDENTIFIER  print
 sub1
+unary_operator
+3  unary_operator  -
+sub2
 primary_expression
-4  IDENTIFIER  y
+3  CONSTANT  1
 return_statement
-5  reserved_keywords  return
+4  reserved_keywords  return
 sub0
 multiplicative_expression
 sub0
 primary_expression
-5  IDENTIFIER  x
+4  IDENTIFIER  y
 sub1
 unary_operator
-5  unary_operator  *
+4  unary_operator  *
 sub2
 primary_expression
-5  IDENTIFIER  y
+4  IDENTIFIER  z
 function_definition
-9  type_specifier  void
-9  IDENTIFIER  main
+8  type_specifier  void
+8  IDENTIFIER  main
 sub0
+declaration
+sub0
+type_specifier
+10  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+10  IDENTIFIER  a
+sub0
+initializer_expression
+sub0
+direct_declarator
+10  IDENTIFIER  a
+sub1
+assignment_operator
+10  assignment_operator  =
+sub2
+function_call
+sub0
+primary_expression
+10  IDENTIFIER  read
 declaration
 sub0
 type_specifier
@@ -86,50 +121,35 @@ sub1
 init_declarator_list
 sub0
 direct_declarator
-11  IDENTIFIER  a
+11  IDENTIFIER  c
 sub0
 initializer_expression
 sub0
 direct_declarator
-11  IDENTIFIER  a
+11  IDENTIFIER  c
 sub1
 assignment_operator
 11  assignment_operator  =
 sub2
-primary_expression
-11  CONSTANT  5
-declaration
-sub0
-type_specifier
-12  type_specifier  int
-sub1
-init_declarator_list
-sub0
-direct_declarator
-12  IDENTIFIER  c
-sub0
-initializer_expression
-sub0
-direct_declarator
-12  IDENTIFIER  c
-sub1
-assignment_operator
-12  assignment_operator  =
-sub2
 function_call
 sub0
 primary_expression
-12  IDENTIFIER  s
+11  IDENTIFIER  s
 sub1
-primary_expression
-12  IDENTIFIER  a
 function_call
 sub0
 primary_expression
-13  IDENTIFIER  print
+11  IDENTIFIER  s
 sub1
 primary_expression
-13  IDENTIFIER  c
+11  IDENTIFIER  a
+function_call
+sub0
+primary_expression
+12  IDENTIFIER  print
+sub1
+primary_expression
+12  IDENTIFIER  c
 
 
 
@@ -139,16 +159,17 @@ PARAM var0
 Temp0 = #1
 Temp1 = var0 + Temp0
 var1 = Temp1
-ARG var0
-CALL print
-ARG var1
-CALL print
-Temp0 = var0 * var1
+Temp0 = #1
+Temp1 = var0 - Temp0
+var2 = Temp1
+Temp0 = var1 * var2
 RETURN Temp0
 FUNCTION main :
-Temp0 = #5
+Temp0 = CALL read
 var0 = Temp0
 ARG var0
+ARG 
+CALL s
 Temp0 = CALL s
 var1 = Temp0
 ARG var1

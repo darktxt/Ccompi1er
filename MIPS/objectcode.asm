@@ -20,31 +20,36 @@ print:
     move $v0,$0
     jr $ra
 s:
-	move $t1,$a0
-	li $t2,1
-	add $t3,$t1,$t2
-	move $t4,$t3
-	move $t0,$a0
-	move $a0,$t1
-	addi $sp,$sp,-4
-	sw $ra,0($sp)
-	jal print
-	lw $ra,0($sp)
-	addi $sp,$sp,4
-	move $t0,$a0
-	move $a0,$t4
-	addi $sp,$sp,-4
-	sw $ra,0($sp)
-	jal print
-	lw $ra,0($sp)
-	addi $sp,$sp,4
-	mul $t2,$t1,$t4
-	move $v0,$t2
+	addi $sp,$sp,-20
+	sw $t0,12($sp)
+	sw $t1,16($sp)
+	lw $t7,8($sp)
+	move $t7,$a0
+	li $t0,1
+	add $t1,$t7,$t0
+	lw $t8,4($sp)
+	move $t8,$t1
+	li $t0,1
+	sub $t1,$t7,$t0
+	lw $t9,0($sp)
+	move $t9,$t1
+	mul $t0,$t8,$t9
+	move $v0,$t0
 	jr $ra
+	lw $t0,12($sp)
+	lw $t1,16($sp)
+	addi $sp,$sp,20
 main:
-	li $t2,5
-	move $t1,$t2
-	move $t0,$a0
+	addi $sp,$sp,-12
+	sw $t0,4($sp)
+	sw $t1,8($sp)
+	addi $sp,$sp,-4
+	sw $ra,0($sp)
+	jal read
+	lw $ra,0($sp)
+	move $t0,$v0
+	addi $sp,$sp,4
+	move $t1,$t0
 	move $a0,$t1
 	addi $sp,$sp,-24
 	sw $t0,0($sp)
@@ -61,12 +66,15 @@ main:
 	lw $t3,16($sp)
 	lw $t4,20($sp)
 	addi $sp,$sp,24
-	move $t2 $v0
-	move $t4,$t2
-	move $t0,$a0
-	move $a0,$t4
+	move $t0 $v0
+	lw $t7,0($sp)
+	move $t7,$t0
+	move $a0,$t7
 	addi $sp,$sp,-4
 	sw $ra,0($sp)
 	jal print
 	lw $ra,0($sp)
 	addi $sp,$sp,4
+	lw $t0,4($sp)
+	lw $t1,8($sp)
+	addi $sp,$sp,12
