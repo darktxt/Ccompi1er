@@ -12,6 +12,8 @@
         "utility": "cpp",
         "vector": "cpp",
         "algorithm": "c",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "__bit_reference": "cpp",
+        "iosfwd": "cpp"
     }
 }

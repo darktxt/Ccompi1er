@@ -105,13 +105,13 @@ def write_to_txt(Obj):
     f=open('./MIPS/objectcode.asm','w')
     template='''
 .data
-_prompt: .asciiz "Enter an integer:"
+_hint: .asciiz "Input:"
 _ret: .asciiz "\\n"
 .globl main
 .text
 read:
     li $v0,4
-    la $a0,_prompt
+    la $a0,_hint
     syscall
     li $v0,5
     syscall
@@ -137,11 +137,14 @@ def parser():
     Load_Var(Inter)    #第一遍扫描，记录所有变量
     Obj=[]
 
+
     for i in range(len(Inter)):
         line = Inter[i]
         if line[0] == "中间树":
-            Inter = Inter[i+1:]
-            break
+            start = i+1
+        if "函数表" in line[0]:
+            end = i
+    Inter = Inter[start:end+1]
 
     num = -1
     # for line in Inter[:num]:

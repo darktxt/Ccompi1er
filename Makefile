@@ -5,8 +5,14 @@ clang++ -std=c++11 -g main.cpp compiler.cpp mylex.cpp CodeGen.cpp `llvm-config -
 ./toy
 clang++ output.o
 ./a.out
-# g++ -std=c++11 -o compiler compiler.cpp mylex.cpp main.cpp >> ./MIPS/intercode.txt
+
+# g++ -std=c++11 -o compiler compiler.cpp mylex.cpp main.cpp 
+# ./compiler > ./MIPS/intercode.txt
 # echo "--------------AST代码----------------"
-# python3 ./MIPS/MIPS.py
+# cat ./MIPS/intercode.txt
+# python3 ./MIPS/MIPS.py >> 2
+# echo ""
 # echo "--------------目标代码----------------"
 # cat ./MIPS/objectcode.asm
+# echo ""
+# cat ./ErrorLog.txt

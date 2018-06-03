@@ -8,6 +8,8 @@
 extern FILE *yyin;
 using namespace std;
 extern node* root;
+extern bool hasError;
+extern int errorNum;
 int yyparse();
 int main()
 {
@@ -16,7 +18,12 @@ int main()
 	//root->debugInfo(true,true); //show info all the instructions following,no extand
 	cout<<endl<<endl;
 	//root->next->next->debugInfo(false,true);//only show this instruction,extand
-	std::cout << endl << "中间树" << endl;
-	RGenerator translator(root);
+	if(!hasError){
+		cout << endl << "中间树" << endl;
+		RGenerator translator(root);
+	}
+	else{
+		cout<<"There are "<<errorNum<<" syntax error!"<<endl;	
+	}
 	return 0;
 }
