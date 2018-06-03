@@ -1,35 +1,185 @@
-int s(){
-	int a = 1;
+int s1(int x){
+	int y = x + 1;
+	int z = x - 1;
+	return y*z;
 }
+
 
 void main()
 {
-	int a = 5;
-	int c = a;
-	int b = a + 1;
+	int a = read();
+	int c = s(s(3));
 	print(c);
-	s();
-}
+}function_definition
+1  type_specifier  int
+1  IDENTIFIER  s1
+sub0
+parameter_declaration
+1  type_specifier  int
+1  IDENTIFIER  x
+sub1
+declaration
+sub0
+type_specifier
+2  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+2  IDENTIFIER  y
+sub0
+initializer_expression
+sub0
+direct_declarator
+2  IDENTIFIER  y
+sub1
+assignment_operator
+2  assignment_operator  =
+sub2
+additive_expression
+sub0
+primary_expression
+2  IDENTIFIER  x
+sub1
+unary_operator
+2  unary_operator  +
+sub2
+primary_expression
+2  CONSTANT  1
+declaration
+sub0
+type_specifier
+3  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+3  IDENTIFIER  z
+sub0
+initializer_expression
+sub0
+direct_declarator
+3  IDENTIFIER  z
+sub1
+assignment_operator
+3  assignment_operator  =
+sub2
+additive_expression
+sub0
+primary_expression
+3  IDENTIFIER  x
+sub1
+unary_operator
+3  unary_operator  -
+sub2
+primary_expression
+3  CONSTANT  1
+return_statement
+4  reserved_keywords  return
+sub0
+multiplicative_expression
+sub0
+primary_expression
+4  IDENTIFIER  y
+sub1
+unary_operator
+4  unary_operator  *
+sub2
+primary_expression
+4  IDENTIFIER  z
+function_definition
+8  type_specifier  void
+8  IDENTIFIER  main
+sub0
+declaration
+sub0
+type_specifier
+10  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+10  IDENTIFIER  a
+sub0
+initializer_expression
+sub0
+direct_declarator
+10  IDENTIFIER  a
+sub1
+assignment_operator
+10  assignment_operator  =
+sub2
+function_call
+sub0
+primary_expression
+10  IDENTIFIER  read
+declaration
+sub0
+type_specifier
+11  type_specifier  int
+sub1
+init_declarator_list
+sub0
+direct_declarator
+11  IDENTIFIER  c
+sub0
+initializer_expression
+sub0
+direct_declarator
+11  IDENTIFIER  c
+sub1
+assignment_operator
+11  assignment_operator  =
+sub2
+function_call
+sub0
+primary_expression
+11  IDENTIFIER  s
+sub1
+function_call
+sub0
+primary_expression
+11  IDENTIFIER  s
+sub1
+primary_expression
+11  CONSTANT  3
+function_call
+sub0
+primary_expression
+12  IDENTIFIER  print
+sub1
+primary_expression
+12  IDENTIFIER  c
+
 
 
 中间树
-FUNCTION s :
-Temp0 = #1
-var0 = Temp0
-FUNCTION main :
-Temp0 = #5
-var0 = Temp0
-var1 = var0
+FUNCTION s1 :
+PARAM var0
 Temp0 = #1
 Temp1 = var0 + Temp0
+var1 = Temp1
+Temp0 = #1
+Temp1 = var0 - Temp0
 var2 = Temp1
+Temp0 = var1 * var2
+RETURN Temp0
+FUNCTION main :
+Temp0 = CALL read
+var0 = Temp0
+Temp0 = #3
+ARG Temp0
+Temp1 = CALL s
+ARG Temp1
+ARG Temp1
+Temp1 = CALL s
+var1 = Temp1
 ARG var1
 CALL print
-CALL s
 
 
 
 
 --------------函数表----------------
-int  s  
+int  s1  int  x  
 void  main  

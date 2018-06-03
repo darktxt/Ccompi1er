@@ -1,3 +1,5 @@
 ----------------错误报告----------------
+11 : No function named with s
+11 : No function named with s
 
-0 errors, 0 warnings
+2 errors, 2 warnings

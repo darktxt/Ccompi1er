@@ -1,12 +1,13 @@
-int s(){
-	int a = 1;
+int s1(int x){
+	int y = x + 1;
+	int z = x - 1;
+	return y*z;
 }
+
 
 void main()
 {
-	int a = 5;
-	int c = a;
-	int b = a + 1;
+	int a = read();
+	int c = s(s(3));
 	print(c);
-	s();
 }
